@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>fab</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="fab">
+            <circle id="Oval" fill="#F14791" cx="28" cy="28" r="28"></circle>
+            <polygon id="Shape" fill="#FFFFFF" points="35 29 29 29 29 35 27 35 27 29 21 29 21 27 27 27 27 21 29 21 29 27 35 27"></polygon>
+        </g>
+    </g>
+</svg>
