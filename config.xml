@@ -1,14 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<widget xmlns   = "http://www.w3.org/ns/widgets"
-    xmlns:gap   = "http://phonegap.com/ns/1.0"
-    id          = "com.insidecoach.app"
-    version     = "0.2.0" >
-
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.insidecoach.app" version="0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Inside Coach</name>
     <description>Inside Coach App</description>
-    <author href="https://build.phonegap.com" email="info@insidecoach.com">Inside Coach</author>
-	<icon src="images/icon.png" />	
-	<access origin="*" />
-	<preference name="exit-on-suspend" value="true" />
-
+    <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
+    <icon src="images/icon.png" />
+    <access origin="*" />
+    <preference name="exit-on-suspend" value="true" />
+    <plugin name="phonegap-plugin-speech-synthesis" spec="https://github.com/macdonst/SpeechSynthesisPlugin" />
+    <plugin name="cordova-plugin-media" spec="https://github.com/apache/cordova-plugin-media" />    
 </widget>
