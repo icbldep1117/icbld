@@ -5,7 +5,5 @@
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
     <icon src="images/icon.png" />
     <access origin="*" />
-    <preference name="exit-on-suspend" value="true" />
-    <plugin name="phonegap-plugin-speech-synthesis" spec="https://github.com/macdonst/SpeechSynthesisPlugin" />
-    <plugin name="cordova-plugin-media" spec="https://github.com/apache/cordova-plugin-media" />    
+    <preference name="exit-on-suspend" value="true" /> 
 </widget>
