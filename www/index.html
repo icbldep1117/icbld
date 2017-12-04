@@ -373,11 +373,12 @@ body .hamburgler-active {
 .button {
   font-family: inherit;
   font-size: inherit;
-  color: #f0f4f8;
+  color: #ff7c00;
   /*background: none;*/
   display: block;
-  border: none;
-  background-color: #025fbc;
+  border: 1px solid #ff7c00;
+  background-color: white;
+  /*$secondary-background-color;*/
   border-radius: 30px;
   width: 100%;
   text-transform: uppercase;
@@ -907,7 +908,7 @@ table {
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1512359533";
+var $VERSION = "1512410199";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -1822,13 +1823,7 @@ function Audio_File_Player(filename, audio_element_id, should_loop)
 
 /*------------------------------------------------------------*/
 Audio_File_Player.prototype.init = function(filename, audio_element)
-{	
-  this.audio_nodes.gain       = global_audio_context.createGain();
-  //this.audio_nodes.gain       = global_audio_context.createScriptProcessor(1024, 1, 1);;
-  this.audio_nodes.gain.connect(global_audio_context.destination);
-  this.audio_nodes.gain.gain.value   =  1;
-  //this.audio_nodes.gain.onaudioprocess = this.process_gain.bind(this);
-  
+{
   //var browser = navigator.userAgent.toLowerCase();
   //browser = (browser.match(/msie|firefox|chrome|safari|opera/g) || "other")[0];
   //console.log("Browser", browser);
@@ -1836,11 +1831,18 @@ Audio_File_Player.prototype.init = function(filename, audio_element)
   //this.create_cordova_plugin_source(filename);
   
   //if(browser == 'safari')
-  //if(global_audio_context !== null)
-    this.create_buffer_source(filename);
-    //this.create_media_element_source(filename, audio_element);
-  //else
-    //this.create_no_web_audio_source(filename, audio_element);
+  if(global_audio_context !== null)
+    {
+      this.audio_nodes.gain       = global_audio_context.createGain();
+      //this.audio_nodes.gain       = global_audio_context.createScriptProcessor(1024, 1, 1);;
+      this.audio_nodes.gain.connect(global_audio_context.destination);
+      this.audio_nodes.gain.gain.value   =  1;
+      //this.audio_nodes.gain.onaudioprocess = this.process_gain.bind(this);
+      this.create_buffer_source(filename);
+      //this.create_media_element_source(filename, audio_element);
+    }
+  else
+    this.create_no_web_audio_source(filename, audio_element);
 }
 
 //MOVE THIS DOWN LATER
@@ -1937,9 +1939,12 @@ Audio_File_Player.prototype.play = function()
     var source = global_audio_context.createBufferSource();
     source.loop = this.loop;
     //todo: how to remove the old node?
-    source.buffer = this.audio_buffer;
-    this.connect_audio_source_to_graph(source);
-    this.audio_source.start();
+    if(source.buffer != null) // didn't load yet
+      {
+        source.buffer = this.audio_buffer;
+        this.connect_audio_source_to_graph(source);
+        this.audio_source.start();
+      }
     }
   else if(this.source_type == "cordova")
     this.cordova_media.play();
@@ -1963,7 +1968,8 @@ Audio_File_Player.prototype.set_gain = function(gain)
 Audio_File_Player.prototype.stop = function(gain)
 {
   if(this.source_type == "buffer")
-    this.audio_source.stop();
+    if(this.audio_source)
+      this.audio_source.stop();
   else if(this.source_type == "cordova")
     this.cordova_media.stop();
   else
@@ -3383,7 +3389,8 @@ Speech_Log_Widget.prototype.display = function(message)
 /*--------------------------------------------------------------------*/
 Speech_Log_Widget.prototype.display_and_speak = function(message)
 {
-  window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
+  if(window.SpeechSynthesisUtterance)
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
   this.message_div.innerHTML = message;
 };
 
@@ -5553,7 +5560,8 @@ function navigation_load_page(page_name)
   document.getElementById(new_page.id).style.display = "block";
   
   if(navigation_current_page_js !== null)
-    navigation_current_page_js.obj.page_did_unload();
+    if(navigation_current_page_js != new_page)
+      navigation_current_page_js.obj.page_did_unload();
   
   navigation_current_page_js = new_page;
   
