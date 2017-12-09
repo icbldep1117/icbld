@@ -12,7 +12,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" -->
 <meta name="viewport" content="width=device-width initial-scale=1.0">
-<link rel="apple-touch-icon" href="logo-touch.svg"/>
+<link rel="apple-touch-icon" href="images/logo-touch.svg"/>
 <meta name="description" content="">
 <meta name="author" content="">
 <style>
@@ -376,7 +376,7 @@ body .hamburgler-active {
   color: #ff7c00;
   /*background: none;*/
   display: block;
-  border: 1px solid #ff7c00;
+  border: 1px solid #6c7b8b;
   background-color: white;
   /*$secondary-background-color;*/
   border-radius: 30px;
@@ -491,6 +491,10 @@ table {
   display: inline-block;
   vertical-align: middle; }
 
+.video_modal_container {
+  color: #ff7a00;
+  cursor: pointer; }
+
 .score_log_widget {
   table-layout: fixed;
   display: none; }
@@ -580,7 +584,8 @@ table {
   <audio id="audio_player_page_a" style="display:none" loop>
     <source src="sounds/music.mp3" type="audio/mpeg" />
   </audio>
-  <div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;<span style="color:#FF7A00; cursor:pointer;" onclick="rollkick_template.video_modal.show_modal()">Watch Training</span><br>
+  <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="navigation_load_page('playlist')">&#xf46c;</div>
+  <span class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_a">Your ball is not connected</div>
   <canvas id="time_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas><br>
   <canvas id="kicks_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas>
@@ -600,14 +605,14 @@ table {
   //the js for this file is in js/rollkick_page_template.js
 </script>
 <div class="page" id="routine-flightkick">
-  <div id="video_modal_page_b" class="video_modal_widget"></div>
+  <span class="video_modal_container" onclick="flightkick_template.video_modal.show_modal()"><div id="video_modal_page_b" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div id="speech_log_page_b" class="speech_log_widget">The ball is not connected.</div>
   <canvas id="distance_dial_page_b" class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
   <canvas id="height_dial_page_b"   class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
   <canvas id="speed_dial_page_b"    class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
   <canvas id="spin_dial_page_b"     class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
   <div id="ball_position_page_b" style="margin:-30px auto 0px auto;"></div><br>
-  <div class="reset_button" id="reset_button_page_b" onclick="flightkick_template.clear()">RESET GAME</div><br>
+  <div class="server-form"><button class="input-field button" onclick="flightkick_template.clear();">RESET GAME</button></div>
   <table id="score_log_page_b" class="score_log_widget"></table>
 </div>
 
@@ -615,10 +620,10 @@ table {
   //the js for this file is in js/flightkick_page_template.js
 </script>
 <div class="page" id="routine-cones">
-  <div id="video_modal_page_c" class="video_modal_widget"></div>
+  <span class="video_modal_container" onclick="cone_weaving_template.video_modal.show_modal()"><div id="video_modal_page_c" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
   <canvas id="ball_position_page_c" class="ball_position_widget" width="900" height="600"></canvas><br>
-  <div class="reset_button" id="reset_button_page_c" onclick="cone_weaving_template.clear()">RESET GAME</div><br>
+  <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();">RESET GAME</button></div>
   <table id="score_log_page_c" class="socore_log_widget"></table>
 </div> <!-- page routine-cones -->
 
@@ -626,12 +631,12 @@ table {
   //the js for this file is in js/cone_weaving_page_template.js
 </script>
 <div class="page" id="routine-freeplay">
-  <div id="video_modal_page_d" class="video_modal_widget"></div>
+  <span class="video_modal_container" onclick="freeplay_template.video_modal.show_modal()"><div id="video_modal_page_d" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_d">Your ball is not connected</div>
   <canvas id="time_dial_page_d"     class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
   <canvas id="distance_dial_page_d" class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
   <canvas id="ball_position_page_d" class="ball_position_widget" width="900" height="600"></canvas><br>
-  <div class="reset_button" id="reset_button_page_d" onclick="distance_tracking_template.clear()">RESET GAME</div><br>
+  <div class="server-form"><button class="input-field button" onclick="freeplay_template.clear();">RESET GAME</button></div>
   <table id="score_log_page_d" class="score_log_widget"></table>
 </div> <!-- page routine-freeplay -->
 
@@ -899,6 +904,69 @@ table {
   };
   
 </script>
+<div id="page-playlist" class="page">
+
+  <!-- AUDERO AUDIO PLAYER -->
+  
+  <div class="server-form"><button class="input-field button" id="update-button">UPDATE LIST</button></div>
+  
+
+  <div data-role="content">
+    <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete">
+    </ul>
+  </div>
+  <div id="waiting-popup" data-role="popup" data-position-to="window" data-dismissible="false">
+    <header data-role="header">
+      Updating
+    </header>
+    <div data-role="content">
+      <p>Searching audio files, please wait...</p>
+    </div>
+  </div>
+  <!-- AUDERO AUDIO PLAYER -->
+          
+  <div class="server-form"><button class="input-field button" onclick="navigation_go_back();">RETURN TO GAME</button></div>
+</div>
+
+<script>
+  GLOBAL_JS_PAGE_OBJECTS['playlist'] = {id:"page-playlist", obj:new Playlist()};
+  
+  /*--------------------------------------------------------*/
+  function Playlist()
+  {
+  
+  }
+
+  /*--------------------------------------------------------*/
+  Playlist.prototype.page_will_unload = function()
+  {
+    console.log(" will unload playlist");
+  }
+
+  /*--------------------------------------------------------*/
+  Playlist.prototype.page_load = function()
+  {
+    console.log("load playlist");
+  }
+      
+  /*--------------------------------------------------------*/
+  Playlist.prototype.page_did_unload = function()
+  {
+    console.log(" will unload playlist");
+  }
+
+  /*--------------------------------------------------------*/
+  Playlist.prototype.refresh_playlist = function()
+  {
+
+  }
+
+  /*--------------------------------------------------------*/
+  Playlist.prototype.user_did_select_song = function(url)
+  {
+    rollkick_template.load_song(url);
+  }
+</script>
 </div><!-- page-holder -->
 
 <!--/HTML-->
@@ -908,7 +976,7 @@ table {
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1512411025";
+var $VERSION = "1512513609";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -1939,7 +2007,8 @@ Audio_File_Player.prototype.play = function()
     var source = global_audio_context.createBufferSource();
     source.loop = this.loop;
     //todo: how to remove the old node?
-    if(source.buffer != null) // didn't load yet
+    
+    if(source !== null) // didn't load yet
       {
         source.buffer = this.audio_buffer;
         this.connect_audio_source_to_graph(source);
@@ -2688,6 +2757,9 @@ Ball_Position_Widget_3D.prototype.clear = function()
   }
   this.line.geometry.attributes.position.needsUpdate = true;
   this.set_zoom(Ball_Position_Widget_3D.min_zoom_radius);
+  
+  this.window_resize();
+  
 };
 
 //PUBLIC
@@ -3358,11 +3430,6 @@ String.prototype.initCap = function ()
 function Speech_Log_Widget(div_id)
 {
   this.message_div = document.getElementById(div_id);
-  //this.message_div.style.lineHeight = "1.5em";
-  //this.message_div.style.height = "1.5em";
-  //this.message_div.style.overflow = "hidden";
-  //this.message_div.style.text_align = "center";
-  //this.message_div.style.border = "1px solid black";
   this.init();
 }
 
@@ -4061,7 +4128,7 @@ function Video_Modal_Widget(button_id, video_path)
   document.body.appendChild         (this.video_modal_div   );
   
   this.close_modal_button.onclick = this.hide_modal.bind(this);
-  this.open_modal_button.onclick  = this.show_modal.bind(this);
+  //this.open_modal_button.onclick  = this.show_modal.bind(this);
 }
 
 //PUBLIC
@@ -4364,6 +4431,7 @@ function Rollkick_Page_Template(IC, video_modal_id, time_dial_id, kicks_dial_id,
   this.wall_position_y                     = new OnlineAverage();
   this.wall_position_t                     = new OnlineAverage();
   
+  this.audio_player_id = audio_player_id;
   this.audio_player = new Audio_File_Player("sounds/music.mp3", audio_player_id, true);
   
   this.timer_thread = null;
@@ -4412,6 +4480,12 @@ Rollkick_Page_Template.prototype.page_load = function(name, video_path, kicks_le
   this.IC.onrollkick       = this.onrollkick.bind(this);
   this.IC.onsurveyorswheel = this.onsurveyorswheel.bind(this);
 };
+
+Rollkick_Page_Template.prototype.load_song = function(url)
+{
+  
+  this.audio_player = new Audio_File_Player(url, this.audio_player_id, true);
+}
 
 /*--------------------------------------------------------------------*/
 Rollkick_Page_Template.prototype.page_will_unload = function()
@@ -4840,13 +4914,12 @@ Flightkick_Page_Template.prototype.page_load = function(name, video_path)
   
   this.score_log.set_game_name(name);
   //this.transport.connect_to_IC(name);
+  this.speech_log.display_and_speak("");
   
   this.height_dial.resume_updating();
   this.distance_dial.resume_updating();
   this.speed_dial.resume_updating();
   this.spin_dial.resume_updating();
-  
-  this.ball_position.window_resize(null);
   
   this.clear();
   this.IC.onflight = this.onflight.bind(this);
@@ -4884,7 +4957,6 @@ Flightkick_Page_Template.prototype.clear = function()
   this.speech_log.message_div.style.backgroundColor = "transparent";
   
   this.state = Flightkick_Page_Template.STATE_WAITING_TO_BECOME_CONNECTED;
-  this.speech_log.display_and_speak("");
   this.speech_log.display("Your ball is not connected");
   
   this.ball_position.clear();
@@ -5020,6 +5092,7 @@ Freeplay_Page_Template.prototype.page_load = function(name, video_path)
   this.session_timer.clear();
   this.init_cue_timer();
   this.score_log.set_game_name(name, ["start_time", "end_time", "Active Duration", "Meters", "session_count", "count_type", "session_duration"]);
+  this.speech_log.display_and_speak("");
 };
 
 /*--------------------------------------------------------------------*/
@@ -5047,7 +5120,6 @@ Freeplay_Page_Template.prototype.clear = function()
   this.IC.soft_init();
 
   this.state = Freeplay_Page_Template.STATE_WAITING_TO_BECOME_CONNECTED;
-  this.speech_log.display_and_speak("");
   this.speech_log.display("Your ball is not connected.");
 
   this.total_distance_integrator.init();
@@ -5491,9 +5563,11 @@ function navigation_load_routine(routine_name)
 {
   var routine  = $ROUTINES[routine_name];
   var new_page = GLOBAL_JS_PAGE_OBJECTS[routine.type];
-  console.log(new_page);
   
   var routine_video_url = routine.video;
+  
+  //do this before calling page_load so 3d widget can set size
+  document.getElementById(new_page.id).style.display = "block";
   
   if(routine.type == 'rollkick')
     {
@@ -5557,9 +5631,8 @@ function navigation_load_page(page_name)
     {
       $IC.stop_tracking();
       new_page.obj.page_load();
+      document.getElementById(new_page.id).style.display = "block";
     }
-    
-  document.getElementById(new_page.id).style.display = "block";
   
   if(navigation_current_page_js !== null)
     if(navigation_current_page_js != new_page)

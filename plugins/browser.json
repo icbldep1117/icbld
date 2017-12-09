@@ -1,0 +1,22 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.insidecoach.app"
+        },
+        "phonegap-plugin-speech-synthesis": {
+            "PACKAGE_NAME": "com.insidecoach.app"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.insidecoach.app"
+        }
+    }
+}
