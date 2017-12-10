@@ -12,7 +12,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!-- meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" -->
 <meta name="viewport" content="width=device-width initial-scale=1.0">
-<link rel="apple-touch-icon" href="images/logo-touch.svg"/>
+<link rel="apple-touch-icon" href="images/logo.svg"/>
 <meta name="description" content="">
 <meta name="author" content="">
 <style>
@@ -799,6 +799,9 @@ table {
       </table>
     </div>
   </div>
+  <div class="server-form">
+    <button class="input-field button" onclick="$IC.reset_calibration();">Reset Calibration</button>
+  </div>
 </div>
 
 <script>
@@ -1084,8 +1087,16 @@ table {
   /*--------------------------------------------------------*/
   EditProfile.prototype.get_base_64_image = function(input)
   {
+    if (typeof FileReader === "undefined")
+      return;
+    
     if(input.files && input.files[0])
       {
+        if(input.files[0].size > 100000)
+          {
+            server_generic_notify("Your image should be less than 100 KB.");
+            return;
+          }
         var reader = new FileReader();
         reader.onload = function(e)
           {
@@ -1639,7 +1650,7 @@ var carousel_pages = [
   <audio id="audio_player_page_a" style="display:none" loop>
     <source src="sounds/music.mp3" type="audio/mpeg" />
   </audio>
-  <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="navigation_load_page('playlist')">&#xf46c;</div>
+  <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="rollkick_template.speech_log.display_and_speak('Hello');/*navigation_load_page('playlist')*/">&#xf46c;</div>
   <span class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_a">Your ball is not connected</div>
   <canvas id="time_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas><br>
@@ -1935,7 +1946,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1512802181";
+var $VERSION = "1512881474";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -4503,10 +4514,12 @@ Speech_Log_Widget.prototype.display_and_speak = function(message)
   /__/ .__/\___\___\__,_\___/_|_|_\___|\__\___|_|    \_/\_/|_\__,_\__, \___|\__|
 -----|_|----------------------------------------------------------|___/-  
 ----------------------------------------------------------------------*/
-//these must be hex
-Speedometer_Widget.MAIN_COLOR      = "#5F6B77";
+//hex+alpha not working on android browser
+Speedometer_Widget.MAIN_COLOR      = "rgb(2, 95, 188)";
+Speedometer_Widget.TOUCH_COLOR     = "rgb(255, 124, 0)";
+Speedometer_Widget.MAIN_COLOR_A    = "rgba(2, 95, 188, 0.7)";
+Speedometer_Widget.TOUCH_COLOR_A   = "rgba(255, 124, 0, 0.7)";
 Speedometer_Widget.PASS_COLOR      = "#025FBC";
-Speedometer_Widget.TOUCH_COLOR     = "#FF7C00";
 Speedometer_Widget.FONT            = "Quicksand";
 
 Speedometer_Widget.STYLE_TIMER       = 0;
@@ -4764,9 +4777,9 @@ Speedometer_Widget.prototype.draw = function(level, num, goal, goal_2)
   this.context.lineWidth   = 0.1 * radius;
   //draw red or green arc to red line
   if(this.value_is_in_goal_range() === 0)
-    this.context.strokeStyle   = Speedometer_Widget.TOUCH_COLOR + "B2";
+    this.context.strokeStyle   = Speedometer_Widget.TOUCH_COLOR_A;// + "B2";
   else
-    this.context.strokeStyle   = Speedometer_Widget.MAIN_COLOR + "B2";
+    this.context.strokeStyle   = Speedometer_Widget.MAIN_COLOR_A;// + "B2";
   this.context.beginPath   ();
   if(this.style == Speedometer_Widget.STYLE_TIMER)
     this.context.arc(0, 0, 0.9 * radius, - 0.5*Math.PI, red_line - 0.5*Math.PI);
@@ -6600,15 +6613,21 @@ function navigation_has_back_history()
 }
 
 /*--------------------------------------------------------------------*/
+function navigation_get_current_page_name()
+{
+  var result = "";
+  if(navigation_back_history.length > 0)
+    result = navigation_back_history[navigation_back_history.length-1][0];
+  return result;
+}
+
+/*--------------------------------------------------------------------*/
 function navigation_load_routine(routine_name)
 {
   var routine  = $ROUTINES[routine_name];
   var new_page = GLOBAL_JS_PAGE_OBJECTS[routine.type];
   
   var routine_video_url = routine.video;
-  
-  //do this before calling page_load so 3d widget can set size
-  document.getElementById(new_page.id).style.display = "block";
   
   if(routine.type == 'rollkick')
     {
@@ -6640,7 +6659,6 @@ function navigation_load_routine(routine_name)
     }
       
   $IC.start_tracking();
-  return new_page;
 }
 
 /*--------------------------------------------------------------------*/
@@ -6651,13 +6669,26 @@ function navigation_load_page(page_name)
   var i;
   
   server_offline_queue_try_to_sync();
+  navigation_close_menu();
+  
+  if(navigation_get_current_page_name() == page_name)
+    return;
+  
+  new_page = GLOBAL_JS_PAGE_OBJECTS[page_name];
+  if(!new_page)
+    {
+      new_page = GLOBAL_JS_PAGE_OBJECTS[$ROUTINES[page_name].type];
+      is_routine = true;
+    }
+  if(!new_page)
+    return;
   
   navigation_back_button.style.visibility = (navigation_back_history.length > 0) ? "visible" : "hidden";
   while(navigation_back_history.length > 100)
     navigation_back_history.shift();
   navigation_back_history.push(arguments); 
   
-  document.getElementById("page_title").innerHTML = page_name.toUpperCase().replace("-", " ");
+  document.getElementById("page_title").innerHTML = page_name.toUpperCase().replace(/-/g, " ");
   
   if(navigation_current_page_js !== null)
     {
@@ -6665,18 +6696,17 @@ function navigation_load_page(page_name)
       document.getElementById(navigation_current_page_js.id).style.display = "none";
     }
     
-  new_page = GLOBAL_JS_PAGE_OBJECTS[page_name];
+  document.getElementById(new_page.id).style.display = "block";
   
-  if(new_page == null)
+  
+  if(is_routine)
     {
-      is_routine = true;
-      new_page = navigation_load_routine(page_name);
+      navigation_load_routine(page_name);
     }
   else
     {
       $IC.stop_tracking();
       new_page.obj.page_load();
-      document.getElementById(new_page.id).style.display = "block";
     }
   
   if(navigation_current_page_js !== null)
@@ -6686,8 +6716,6 @@ function navigation_load_page(page_name)
   navigation_current_page_js = new_page;
   
   navigation_show_top_and_bottom_menus();
-  
-  navigation_close_menu();
 }
 
 

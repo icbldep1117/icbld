@@ -3,7 +3,7 @@
     <name>Inside Coach</name>
     <description>Inside Coach App</description>
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
-    <icon src="images/icon.png" />
+    <icon src="www/images/icon.png" />
     <access origin="*" />
     <preference name="exit-on-suspend" value="true" />
 </widget>
