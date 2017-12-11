@@ -1990,7 +1990,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1513025417";
+var $VERSION = "1513033219";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -6914,14 +6914,15 @@ var SERVER_SCRIPT_LOCATION                  = "http://server-stage.insidecoach.n
 var SERVER_LOGIN_LOCAL_STORAGE_NAME         = "SERVER_LOGIN_INFO";
 var SERVER_OFFLINE_QUEUE_MAX_SIZE           = 500;
 var SERVER_OFFLINE_QUEUE_LOCAL_STORAGE_NAME = "SERVER_OFFLINE_QUEUE";
+var server_has_responded                    = false;
 
 /*--------------------------------------------------------------------*/
 function server_init()
 {
   server_load_profile_image_from_local_storage();
+  server_ping();
   if(server_user_is_logged_in())
-    if(server_user_is_online())
-      edit_profile.get_account_info(window.event, "edit_profile_form");
+    edit_profile.get_account_info(window.event, "edit_profile_form");
 }
 
 /*--------------------------------------------------------------------*/
@@ -7006,6 +7007,7 @@ function server_send_request(endpoint, params, callback)
             if(callback !== null)
               callback(msg, params);
           }
+        server_has_responded = true;
         server_offline_queue_try_to_sync();
       },
       
@@ -7018,6 +7020,7 @@ function server_send_request(endpoint, params, callback)
         if(response.message)
           if(!params.offline_queue)
             server_generic_notify(response.message);
+        server_has_responded = true;
         server_offline_queue_try_to_sync();
       },
       
@@ -7110,7 +7113,24 @@ function server_log_out()
 /*--------------------------------------------------------------------*/
 function server_ping()
 {
-  server_send_request("auth/ping", "", null);
+  $.ajax({  
+    type    : "POST",
+    headers : {Accept: "application/json"},
+    url     : SERVER_SCRIPT_LOCATION + "auth/ping",
+    data    : "",
+    
+    success : function(msg)
+      {
+        server_has_responded = true;
+      },
+      
+    error: function(msg, ajax_options, thrown_error)
+      {
+        server_has_responded = false;
+      },
+      
+    timeout: 3000,
+  });
 }
 
 /*--------------------------------------------------------------------*/
@@ -7160,8 +7180,17 @@ function server_validate_user_is_logged_in_and_notify()
 /*--------------------------------------------------------------------*/
 function server_user_is_online()
 {
-  console.log("Online: ", navigator.onLine);
-  return navigator.onLine;
+  var result = false;
+  if(navigator.onLine)
+    {
+      if(server_has_responded)
+        result = true;
+      server_ping();
+    }
+  else
+    server_has_responded = false;
+    
+  return result;
 }
 
 /*--------------------------------------------------------------------*/
