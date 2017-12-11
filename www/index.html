@@ -337,8 +337,8 @@ body .hamburgler-active {
 
 .server-form .avatar-circle {
   display: block;
-  width: 72px;
-  height: 72px;
+  width: 100px;
+  height: 100px;
   margin: auto;
   margin-bottom: 30px;
   border-radius: 50%; }
@@ -636,9 +636,9 @@ table {
     <input class="input-field" type="password" placeholder="Enter Current Password" name="current" required>
     <input class="input-field" type="password" placeholder="Enter New Password" name="new" required>
     <input class="input-field" type="password" placeholder="Repeat Password" name="repeat" required>
-    <button type="button" class="input-field button" onclick="change_password.change_password(event, this.form)">Submit Changes</button>
+    <button type="button" name="submit" id="change_password_submit_button" class="input-field button" onclick="change_password.change_password(event, this.form)">Submit Changes</button>
     <div class="secondary-form-button" onclick="navigation_load_page('edit-profile')">
-      Cancel
+      Edit Profile
     </div>    
   </form>
 </div>
@@ -674,7 +674,7 @@ table {
   /*--------------------------------------------------------*/
   ChangePassword.prototype.clear = function()
   {
-    navigation_clear_form("reset_password_form");
+    navigation_clear_form("change_password_form");
   };
   
   /*--------------------------------------------------------------------*/
@@ -702,13 +702,19 @@ table {
                 token: server_get_login_token(),
                 password: form.new.value,
                 old_password: form.current.value,
+                inactive_button_id: form.submit.id,
               };
-  
              server_send_request("auth/password/update", params, null);
+             server_inactivate_button(form.submit, 10000);
           }
       }  
   };
 
+  /*--------------------------------------------------------*/
+  ChangePassword.prototype.change_password_callback = function()
+  {
+    server_generic_notify("Your password was updated.");
+  };
 </script>
 <div id="page-diagnostic" class="page">
   <div class="server-form">
@@ -1108,7 +1114,7 @@ table {
                 /* use a canvas to crop and resize the image */
                 var canvas  = document.createElement('canvas');
                 var context = canvas.getContext("2d");
-                var IMAGE_SIZE   = 600;
+                var IMAGE_SIZE   = 300;
                 var width  = this.width;
                 var height = this.height;
                 if((width == 0) || (height == 0)) return;
@@ -1649,7 +1655,7 @@ var carousel_pages = [
   <span class="video_modal_container" onclick="cone_weaving_template.video_modal.show_modal()"><div id="video_modal_page_c" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
   <canvas id="ball_position_page_c" class="ball_position_widget" width="900" height="600"></canvas><br>
-  <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();">RESET GAME</button></div>
+  <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();$IC.start_tracking();">RESET GAME</button></div>
   <table id="score_log_page_c" class="socore_log_widget"></table>
 </div> <!-- page routine-cones -->
 
@@ -1664,7 +1670,7 @@ var carousel_pages = [
   <canvas id="speed_dial_page_b"    class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
   <canvas id="spin_dial_page_b"     class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
   <div id="ball_position_page_b" style="margin:-30px auto 0px auto;"></div><br>
-  <div class="server-form"><button class="input-field button" onclick="flightkick_template.clear();">RESET GAME</button></div>
+  <div class="server-form"><button class="input-field button" onclick="flightkick_template.clear();$IC.start_tracking();">RESET GAME</button></div>
   <table id="score_log_page_b" class="score_log_widget"></table>
 </div>
 
@@ -1677,7 +1683,7 @@ var carousel_pages = [
   <canvas id="time_dial_page_d"     class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
   <canvas id="distance_dial_page_d" class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
   <canvas id="ball_position_page_d" class="ball_position_widget" width="900" height="600"></canvas><br>
-  <div class="server-form"><button class="input-field button" onclick="freeplay_template.clear();">RESET GAME</button></div>
+  <div class="server-form"><button class="input-field button" onclick="freeplay_template.clear();$IC.start_tracking();">RESET GAME</button></div>
   <table id="score_log_page_d" class="score_log_widget"></table>
 </div> <!-- page routine-freeplay -->
 
@@ -1701,7 +1707,7 @@ var carousel_pages = [
     <!-- div class="icon" style="float:right; font-size:1.7em; color:rgb(122, 1, 38); position:relative; top:-0.25em;">&#xf3ac;</div -->
   <hr>
   </div>
-  <div class="server-form" style="position:relative; top:-45px;"><button class="input-field button" onclick="rollkick_template.clear();">RESET GAME</button></div>
+  <div class="server-form" style="position:relative; top:-45px;"><button class="input-field button" onclick="rollkick_template.clear(); $IC.start_tracking();">RESET GAME</button></div>
   <table id="score_log_page_a" class="score_log_widget"></table>
 </div> <!-- page routine-rollkick -->
 
@@ -1984,7 +1990,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1512973295";
+var $VERSION = "1513024913";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -4530,6 +4536,28 @@ Speech_Log_Widget.prototype.clear = function()
   this.message_div.innerHTML = "";
 };
 
+/*--------------------------------------------------------------------*/
+Speech_Log_Widget.prototype.prime = function()
+{
+/*
+  var txt = "";
+  txt += "<p>Browser CodeName: " + navigator.appCodeName + "</p>";
+  txt += "<p>Browser Name: " + navigator.appName + "</p>";
+  txt += "<p>Browser Version: " + navigator.appVersion + "</p>";
+  txt += "<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>";
+  txt += "<p>Browser Language: " + navigator.language + "</p>";
+  txt += "<p>Browser Online: " + navigator.onLine + "</p>";
+  txt += "<p>Platform: " + navigator.platform + "</p>";
+  txt += "<p>User-agent header: " + navigator.userAgent + "</p>";
+  server_generic_notify(txt);
+*/
+
+  var is_ios = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  if(window.SpeechSynthesisUtterance)
+    if(is_ios)
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+};
+
 //PUBLIC
 /*--------------------------------------------------------------------*/
 Speech_Log_Widget.prototype.display = function(message)
@@ -4542,7 +4570,8 @@ Speech_Log_Widget.prototype.display = function(message)
 Speech_Log_Widget.prototype.display_and_speak = function(message)
 {
   if(window.SpeechSynthesisUtterance)
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
+    if(message != "") //empty string crashes Android
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
   this.message_div.innerHTML = message;
 };
 
@@ -5527,12 +5556,11 @@ function Rollkick_Page_Template(IC, video_modal_id, time_dial_id, kicks_dial_id,
 /*--------------------------------------------------------------------*/
 Rollkick_Page_Template.prototype.page_load = function(name, video_path, kicks_level_text, kicks_num_text, divide_by, mode)
 {
-  console.log("rollkick page load");
   this.video_modal.set_video(video_path);
   var column_names = ["Start Time", "End Time", "Minutes", kicks_num_text, "Avg Duration", "Duration Variance", "Avg Force", "Force Variance", "Avg Distance", "Dist Variance", "session_count", "count_type", "session_duration"];
   this.score_log.set_game_name(name, column_names);
 
-  this.speech_log.display_and_speak(""); //This primes IOS, otherwise nothing is spoken
+  this.speech_log.prime(); //This primes IOS, otherwise nothing is spoken
   this.clear();
   this.timer_run();
   
@@ -5999,7 +6027,7 @@ Flightkick_Page_Template.prototype.page_load = function(name, video_path)
   
   this.score_log.set_game_name(name);
   //this.transport.connect_to_IC(name);
-  this.speech_log.display_and_speak("");
+  this.speech_log.prime();
   
   this.height_dial.resume_updating();
   this.distance_dial.resume_updating();
@@ -6177,7 +6205,7 @@ Freeplay_Page_Template.prototype.page_load = function(name, video_path)
   this.session_timer.clear();
   this.init_cue_timer();
   this.score_log.set_game_name(name, ["start_time", "end_time", "Active Duration", "Meters", "session_count", "count_type", "session_duration"]);
-  this.speech_log.display_and_speak("");
+  this.speech_log.prime();
 };
 
 /*--------------------------------------------------------------------*/
@@ -6386,7 +6414,7 @@ Cone_Weaving_Page_Template.prototype.page_load = function(name, video_path, spee
 {
   this.video_modal.set_video(video_path);
   this.score_log.set_game_name(name);
-  this.speech_log.display_and_speak("");
+  this.speech_log.prime();
   this.clear();
   //this.transport.connect_to_IC(name);
   //this.transport.disconnect_from_IC(this.name);
@@ -6892,7 +6920,8 @@ function server_init()
 {
   server_load_profile_image_from_local_storage();
   if(server_user_is_logged_in())
-    edit_profile.get_account_info(window.event, "edit_profile_form");
+    if(server_user_is_online())
+      edit_profile.get_account_info(window.event, "edit_profile_form");
 }
 
 /*--------------------------------------------------------------------*/
@@ -6968,7 +6997,7 @@ function server_send_request(endpoint, params, callback)
             if(!params.offline_queue)
               server_generic_notify(msg.message);
           }
-        else if((msg.status !== false) && (callback !== null))
+        else if(msg.status !== false)
           {
             if(msg.message)
               if(msg.message != "ok")
@@ -7131,6 +7160,7 @@ function server_validate_user_is_logged_in_and_notify()
 /*--------------------------------------------------------------------*/
 function server_user_is_online()
 {
+  console.log("Online: ", navigator.onLine);
   return navigator.onLine;
 }
 
