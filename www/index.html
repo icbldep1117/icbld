@@ -987,10 +987,10 @@ table {
     <input class="input-field" type="text" placeholder="Phone No" name="phone_no">
     
     <label for="upload" class="input-field button" style="line-height:40px">Choose your avatar</label>
-    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="image/*">
+    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="image/*" capture="camera">
     <input class="input-field button" type="hidden"  id="uploaded_image" name="uploaded_image">
     
-    <button type="submit" class="input-field button" onclick="edit_profile.update_account(event, this.form)">Submit Changes</button>
+    <button type="submit" name="submit" id="edit_profile_button" class="input-field button" onclick="edit_profile.update_account(event, this.form)">Submit Changes</button>
     <div class="secondary-form-button" onclick="navigation_load_page('change-password');">
       Change Password
     </div>   
@@ -1204,7 +1204,11 @@ table {
             server_update_profile_image(form.uploaded_image.value);
           }
         if(server_user_is_online())
-          server_send_request("auth/profile/update", params, this.update_account_callback.bind(this));
+          {
+            params.inactive_button_id = form.submit.id;
+            server_send_request("auth/profile/update", params, this.update_account_callback.bind(this));
+            server_inactivate_button(form.submit, 10000);
+          }
        else
          {
            server_offline_queue_add("auth/profile/update", params, this.update_account_callback);
@@ -1980,7 +1984,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1512971791";
+var $VERSION = "1512973295";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":10,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.01,"impact_sensitivity":7,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"Volley Kick":{"type":"flightkick","video":"videos\/volley_kick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"Drop Kick":{"type":"flightkick","video":"videos\/dropkick.mp4","menu_parent":"Kicks","flightkick_mode":"dropkick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
