@@ -1,0 +1,10 @@
+{
+    "phonegap-plugin-speech-synthesis": {
+        "source": {
+            "type": "registry",
+            "id": "https://github.com/macdonst/SpeechSynthesisPlugin"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
