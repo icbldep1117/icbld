@@ -585,6 +585,7 @@ table {
 </head>
 <body>
 <!--HTML-->
+<script type="text/javascript" src="cordova.js"></script>
 
 <!--PAGES-->
 <script>GLOBAL_JS_PAGE_OBJECTS = []</script>
@@ -1509,69 +1510,279 @@ var carousel_pages = [
 </script>
 <div id="page-playlist" class="page">
 
-  <!-- AUDERO AUDIO PLAYER -->
-  
-  <div class="server-form"><button class="input-field button" id="update-button">UPDATE LIST</button></div>
-  
+    <!-- AUDERO AUDIO PLAYER -->
 
-  <div data-role="content">
-    <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete">
-    </ul>
-  </div>
-  <div id="waiting-popup" data-role="popup" data-position-to="window" data-dismissible="false">
-    <header data-role="header">
-      Updating
-    </header>
-    <div data-role="content">
-      <p>Searching audio files, please wait...</p>
+    <div class="server-form"><button class="input-field button" id="update-button">UPDATE LIST</button></div>
+
+    <div>
+        <input class="input-field" type="text" placeholder="Search songs" onkeyup="playlist_page.onTextChange(this.value)" name="song_search" >
     </div>
-  </div>
-  <!-- AUDERO AUDIO PLAYER -->
-          
-  <div class="server-form"><button class="input-field button" onclick="navigation_go_back();">RETURN TO GAME</button></div>
+
+    <div>Selected playlist item</div>
+    <div id="selectedMusicFile"></div>
+<!-- //TODO DO THIS LATER FOR MULTI SELECT -->
+<!--    <div>Play list</div>-->
+<!--    <div id="noPlaylistItems"></div>-->
+<!--    <div data-role="content">-->
+<!--        <ul id="playlist-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete">-->
+<!--        </ul>-->
+<!--    </div>-->
+
+    <div id="noOtherMusicItems"></div>
+    <div data-role="content">
+        <ul id="otherMusic-list" data-role="listview" data-autodividers="true" data-filter="true">
+        </ul>
+    </div>
+
+    <div id="waiting-popup" data-role="popup" data-position-to="window" data-dismissible="false">
+        <header id="updatingHeader" data-role="header">
+            Updating
+        </header>
+        <div data-role="content">
+            <p>Searching audio files, please wait...</p>
+        </div>
+    </div>
+    <!-- AUDERO AUDIO PLAYER -->
+
+    <div class="server-form"><button class="input-field button" onclick="navigation_go_back();">RETURN TO GAME</button></div>
 </div>
 
 <script>
-  GLOBAL_JS_PAGE_OBJECTS['playlist'] = {id:"page-playlist", obj:new Playlist()};
-  
-  /*--------------------------------------------------------*/
-  function Playlist()
-  {
-  
-  }
+    GLOBAL_JS_PAGE_OBJECTS['playlist'] = {id:"page-playlist", obj:new Playlist()};
 
-  /*--------------------------------------------------------*/
-  Playlist.prototype.page_will_unload = function()
-  {
-    console.log(" will unload playlist");
-  }
+    var playlist_page = new Playlist();
 
-  /*--------------------------------------------------------*/
-  Playlist.prototype.page_load = function()
-  {
-    console.log("load playlist");
-  }
-      
-  /*--------------------------------------------------------*/
-  Playlist.prototype.page_did_unload = function()
-  {
-    console.log(" will unload playlist");
-  }
+    /*--------------------------------------------------------*/
+    function Playlist()
+    {
 
-  /*--------------------------------------------------------*/
-  Playlist.prototype.refresh_playlist = function()
-  {
+    }
 
-  }
+    Playlist.prototype.DATA_LOADED = false;
 
-  /*--------------------------------------------------------*/
-  Playlist.prototype.user_did_select_song = function(url)
-  {
-    rollkick_template.load_song(url);
-  }
-  
-  
-  
+    Playlist.prototype.SEARCH_TEXT = "";
+
+    Playlist.prototype.USER_MUSIC = [];
+
+    /*--------------------------------------------------------*/
+    Playlist.prototype.page_will_unload = function()
+    {
+        console.log(" will unload playlist");
+    }
+
+    /*--------------------------------------------------------*/
+    Playlist.prototype.page_load = function()
+    {
+        playlist_page._populateUserMusicListAndDisplayLists();
+    }
+
+    /*--------------------------------------------------------*/
+    Playlist.prototype.page_did_unload = function()
+    {
+        console.log(" will unload playlist");
+    }
+
+    /*--------------------------------------------------------*/
+    Playlist.prototype.refresh_playlist = function()
+    {
+
+    }
+
+    /*--------------------------------------------------------*/
+    Playlist.prototype.user_did_select_song = function(url)
+    {
+        rollkick_template.load_song(url);
+    }
+
+    Playlist.prototype.onPlaylistItemSelected = function(fileLocation, fileName) {
+        //TODO DO THIS LATER FOR MULTI SELECT
+//        var userMusicService = new User_Music_Service();
+//
+//        userMusicService.removeSelectedMusicFile(fileLocation);
+//
+//        //we need to remove this song from one being selected!!!!!!!
+//        playlist_page.user_did_select_song(fileLocation);
+//
+//        playlist_page._updatePlaylistAndMusicList();
+    };
+
+    Playlist.prototype.onMusicFileSelected = function(fileLocation, fileName) {
+        var userMusicService = new User_Music_Service();
+
+        var selectedMusicFile = userMusicService.setSelectedMusicFile(fileLocation, fileName);
+        //TODO DO THIS LATER FOR MULTI SELECT
+        //var selectedMusicFiles = userMusicService.addSelectedMusicFile(fileLocation, fileName);
+
+        Playlist.prototype.user_did_select_song(fileLocation);
+
+        playlist_page._updatePlaylistAndMusicList();
+    };
+
+    Playlist.prototype.onTextChange = function(text) {
+        //TODO this only happens when a key is pressed. We might need to support paste as well...
+        Playlist.prototype.SEARCH_TEXT = text;
+
+        if (playlist_page.DATA_LOADED) {
+            playlist_page._updatePlaylistAndMusicList();
+        }
+    };
+
+    /***
+     * PRIVATE METHODS
+     */
+
+    Playlist.prototype._populateUserMusicListAndDisplayLists = function() {
+        var userMusicService = new User_Music_Service();
+        userMusicService.getAllMusicFilesOnDevice([
+            //OTHER POSSIBLES ARE
+            //cordova.file.dataDirectory,
+            //cordova.file.documentsDirectory,
+            //cordova.file.externalApplicationStorageDirectory,
+            //cordova.file.externalCacheDirectory,
+            cordova.file.externalRootDirectory
+            //cordova.file.externalDataDirectory
+            //cordova.file.sharedDirectory,
+            //cordova.file.syncedDataDirectory
+        ], playlist_page._onFoundFileItems);
+    };
+
+    Playlist.prototype._updatePlaylistAndMusicList = function() {
+        var userMusicService = new User_Music_Service();
+
+        var selectedMusicFileDiv = document.getElementById("selectedMusicFile");
+
+        var selectedMusicFile = userMusicService.getSelectedMusicFile();
+        if (selectedMusicFile) {
+            selectedMusicFileDiv.innerHTML = selectedMusicFile.fileName;
+        } else {
+            selectedMusicFileDiv.innerHTML = "No selected music file.";
+        }
+        //TODO DO THIS LATER FOR MULTI SELECT
+//        var noPlaylistItemsDiv = document.getElementById("noPlaylistItems");
+//        var playlistList = document.getElementById("playlist-list");
+//
+//        var selectedMusicFiles = userMusicService.getSelectedMusicFiles();
+//
+//        if (selectedMusicFiles.length === 0) {
+//            noPlaylistItemsDiv.innerHTML = "No items selected. Please select an item.";
+//            playlistList.innerHTML = "";
+//        } else {
+//            noPlaylistItemsDiv.innerHTML = "";
+//            var i;
+//            var playlistListInnerHTML = "";
+//            for (i = 0; i < selectedMusicFiles.length; i++) {
+//                var fileItem = selectedMusicFiles[i];
+//
+//                playlistListInnerHTML += "<li onclick=\"playlist_page.onPlaylistItemSelected(\'" + fileItem.fileLocation + "\', \'" + fileItem.fileName + "\')\">" + fileItem.fileName + "</li>";
+//            }
+//            playlistList.innerHTML = playlistListInnerHTML;
+//        }
+
+        var noOtherMusicItemsDiv = document.getElementById("noOtherMusicItems");
+        var otherMusicList = document.getElementById("otherMusic-list");
+
+
+
+        var fileItems = playlist_page._getFileItemsNotInPlaylist(selectedMusicFile);
+        //TODO DO THIS LATER FOR MULTI SELECT
+        //var fileItems = playlist_page._getFileItemsNotInPlaylist(selectedMusicFiles);
+
+        var searchedFileItems = playlist_page._applySearchOnFileItems(fileItems);
+
+        var otherMusicListListInnerHTML = "";
+
+        if (searchedFileItems.length === 0) {
+            noOtherMusicItemsDiv.innerHTML = "No music found on device.";
+            otherMusicList.innerHTML = "";
+        } else {
+            var i;
+            for (i = 0; i < searchedFileItems.length; i++) {
+                var fileItem = searchedFileItems[i];
+                otherMusicListListInnerHTML += "<li onclick=\"playlist_page.onMusicFileSelected(\'" + fileItem.fileLocation + "\', \'" + fileItem.fileName + "\')\">" + fileItem.fileName + "</li>";
+            }
+
+            noOtherMusicItemsDiv.innerHTML = "";
+            otherMusicList.innerHTML = otherMusicListListInnerHTML;
+        }
+    };
+
+    Playlist.prototype._applySearchOnFileItems = function(fileItems) {
+        var searchText = Playlist.prototype.SEARCH_TEXT;
+
+        if (searchText && searchText.length > 0) {
+            var searchFragments = searchText.toLowerCase().split(/[ ]+/);
+            if (searchFragments.length > 0) {
+                var newFileItems = [];
+
+                var i;
+                for (i = 0; i < fileItems.length; i++) {
+                    var containsSearchFragment = true;
+                    var j;
+                    var fileItem = fileItems[i];
+                    var fileItemNameStrLower = fileItem.fileName.toLowerCase();
+                    for (j = 0; j < searchFragments.length; j++) {
+                        var searchFragment = searchFragments[j];
+                        if (!fileItemNameStrLower.includes(searchFragment)) {
+                            containsSearchFragment = false;
+                        }
+                    }
+                    if (containsSearchFragment) {
+                       newFileItems.push(fileItem);
+                    }
+                }
+
+                return newFileItems;
+
+            } else {
+                return fileItems;
+            }
+        } else {
+            return fileItems;
+        }
+    };
+
+    Playlist.prototype._onFoundFileItems = function(fileItems) {
+
+        var updatingHeader = document.getElementById("updatingHeader");
+        updatingHeader.innerHTML = "";
+
+        var userMusicService = new User_Music_Service();
+
+        Playlist.prototype.USER_MUSIC = userMusicService.sortMusicFilesByFileName(fileItems);
+        Playlist.prototype.DATA_LOADED = true;
+
+        playlist_page._updatePlaylistAndMusicList();
+    };
+
+    Playlist.prototype._getFileItemsNotInPlaylist = function(selectedMusicFile) {
+        //TODO DO THIS LATER FOR MULTI SELECT
+        //Playlist.prototype._getFileItemsNotInPlaylist = function(selectedMusicFiles) {
+        var allFileItems = Playlist.prototype.USER_MUSIC;
+
+        var fileItemsToDisplay = [];
+
+        var selectedMusicFilesMap = {};
+        var i;
+
+        if (selectedMusicFile) {
+            selectedMusicFilesMap[selectedMusicFile.fileLocation] = selectedMusicFile.fileName;
+        }
+        //TODO DO THIS LATER FOR MULTI SELECT
+//        for (i = 0; i < selectedMusicFiles.length; i++) {
+//            var selectedMusicFile = selectedMusicFiles[i];
+//            selectedMusicFilesMap[selectedMusicFile.fileLocation] = selectedMusicFile.fileName;
+//        }
+
+        for (i = 0; i < allFileItems.length; i++) {
+            var fileItem = allFileItems[i];
+            if (!selectedMusicFilesMap.hasOwnProperty(fileItem.fileLocation)) {
+                fileItemsToDisplay.push(fileItem);
+            }
+        }
+
+        return fileItemsToDisplay;
+    };
+
 </script>
 <div id="page-reset-password" class="page">
   <form class="server-form" id="reset_password_form" onsubmit="return false">
@@ -1994,7 +2205,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1513634171";
+var $VERSION = "1515028828";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -3317,6 +3528,146 @@ Session_Timer.prototype.get_datetime = function()
   return s;
 };
 
+function User_Music_Service() {
+    //do nothing
+}
+
+//TODO DO THIS LATER FOR MULTI SELECT
+//User_Music_Service.prototype.SELECTED_MUSIC_FILES = "SELECTED_MUSIC_FILES";
+User_Music_Service.prototype.SELECTED_MUSIC_FILE = "SELECTED_MUSIC_FILE";
+
+User_Music_Service.prototype.getAllMusicFilesOnDevice = function(urls, callback) {
+    console.log("getAllMusicFiles");
+    var self = this;
+
+    //TODO find a way to have URLS in this class not be passed in
+    self.LOCAL_URLS = urls;
+
+    var fileItems = [];
+    var numOfEntries = 0;
+    var doneCalled = false;
+
+    var addFileEntry = function (entry) {
+
+        var dirReader = entry.createReader();
+        dirReader.readEntries(
+            function (entries) {
+
+                //Current one is found
+                numOfEntries--;
+                //Must get all others
+                numOfEntries += entries.length;
+
+                var j;
+                for (j = 0; j < entries.length; j++) {
+                    if (entries[j].isDirectory === true) {
+                        // Recursive -- call back into this subdirectory
+                        addFileEntry(entries[j]);
+                    } else {
+                        //It is a file
+                        numOfEntries--;
+                        var fileName = entries[j].name;
+                        var fileLocation = entries[j].nativeURL;
+
+                        if (self._isMusicFilePath(fileLocation)) {
+                            var fileItem = self._createSelectedMusicFile(fileLocation, fileName);
+
+                            fileItems.push(fileItem);
+                        }
+                    }
+                }
+
+                if (numOfEntries === 0 && !doneCalled) {
+                    doneCalled = true;
+                    callback(fileItems);
+                }
+            },
+            function (error) {
+                console.log("error: " + error);
+            }
+        );
+    };
+
+    var addError = function (error) {
+        console.log("error2: " + error);
+    };
+
+    numOfEntries++;
+    window.resolveLocalFileSystemURL(self.LOCAL_URLS[0], addFileEntry, addError);
+};
+
+User_Music_Service.prototype.getSelectedMusicFile = function() {
+    var selectedMusicFile = localStorage.getItem(this.SELECTED_MUSIC_FILE);
+    if (!selectedMusicFile) {
+        return null;
+    }
+    return JSON.parse(selectedMusicFile);
+};
+
+//TODO DO THIS LATER FOR MULTI SELECT
+// User_Music_Service.prototype.getSelectedMusicFiles = function() {
+//     var selectedMusicFiles = localStorage.getItem(this.SELECTED_MUSIC_FILES);
+//     if (!selectedMusicFiles) {
+//         return [];
+//     }
+//     return JSON.parse(selectedMusicFiles);
+// };
+
+User_Music_Service.prototype.setSelectedMusicFile = function(fileLocation, fileName) {
+    var selectedMusicFile = this._createSelectedMusicFile(fileLocation, fileName);
+
+    localStorage.setItem(this.SELECTED_MUSIC_FILE, JSON.stringify(selectedMusicFile));
+    return selectedMusicFile;
+};
+
+//TODO DO THIS LATER FOR MULTI SELECT
+// User_Music_Service.prototype.addSelectedMusicFile = function(fileLocation, fileName) {
+//     var selectedMusicFile = this._createSelectedMusicFile(fileLocation, fileName);
+//
+//     var selectedMusicFiles = this.getSelectedMusicFiles();
+//     selectedMusicFiles.push(selectedMusicFile);
+//     localStorage.setItem(this.SELECTED_MUSIC_FILES, JSON.stringify(selectedMusicFiles));
+//     return selectedMusicFiles;
+// };
+//
+// User_Music_Service.prototype.removeSelectedMusicFile = function(selectedMusicFileFileLocation) {
+//     var selectedMusicFiles = this.getSelectedMusicFiles();
+//
+//     var i;
+//     for (i = 0; i < selectedMusicFiles.length; i++) {
+//         var selectedMusicFile = selectedMusicFiles[i];
+//         if (selectedMusicFile.fileLocation === selectedMusicFileFileLocation) {
+//             selectedMusicFiles.splice(i, 1);
+//             break;
+//         }
+//     }
+//     localStorage.setItem(this.SELECTED_MUSIC_FILES, JSON.stringify(selectedMusicFiles));
+//     return i;
+// };
+
+User_Music_Service.prototype.sortMusicFilesByFileName = function(musicFiles) {
+    return musicFiles.sort(function(a,b) {return (a.fileName > b.fileName) ? 1 : ((b.fileName > a.fileName) ? -1 : 0);} );
+};
+
+/********
+* PRIVATE METHODS
+ ********/
+
+User_Music_Service.prototype._createSelectedMusicFile = function(fileLocation, fileName) {
+    var selectedMusicFile = {
+        fileLocation : fileLocation,
+        fileName : fileName
+    };
+    return selectedMusicFile;
+};
+
+User_Music_Service.prototype._isMusicFilePath = function(filePath) {
+    //TODO figure out what file types we support
+    if (filePath.includes(".mp3")) { // || filePath.includes(".wav") || filePath.includes(".wma")) {
+        return true;
+    }
+    return false;
+};
 /*-_----------_-_----------------_-_---_-------------------_----_-------   _
   | |__  __ _| | |  _ __  ___ __(_) |_(_)___ _ _   __ __ _(_)__| |__ _ ___| |_ 
   | '_ \/ _` | | | | '_ \/ _ (_-< |  _| / _ \ ' \  \ V  V / / _` / _` / -_)  _|
@@ -5579,7 +5930,18 @@ function Rollkick_Page_Template(IC, video_modal_id, time_dial_id, kicks_dial_id,
   this.wall_position_t                     = new OnlineAverage();
   
   this.audio_player_id = audio_player_id;
-  this.audio_player = new Audio_File_Player("sounds/music.mp3", audio_player_id, true);
+
+    var userMusicService = new User_Music_Service();
+    var selectedPath;
+    var selectedMusicFile = userMusicService.getSelectedMusicFile();
+
+    if (!selectedMusicFile) {
+        selectedPath = "sounds/music.mp3";
+    } else {
+        selectedPath = selectedMusicFile.fileLocation;
+    }
+
+  this.audio_player = new Audio_File_Player(selectedPath, audio_player_id, true);
   
   this.timer_thread = null;
   this.clear();

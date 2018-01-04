@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.insidecoach.app" version="0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <name>Inside Coach</name>
+    <description>Inside Coach App</description>
+    <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
+    <icon src="www/images/icon.png" />
+    <access origin="*" />
+    <preference name="exit-on-suspend" value="true" />
+</widget>
