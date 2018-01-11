@@ -322,7 +322,10 @@ body .hamburgler-active {
   background-image: url("images/side_menu/player_settings.svg"); }
 
 .hamburgler-menu-list li.system-settings-icon > a {
-  background-image: url("images/side_menu/system_settings.svg");
+  background-image: url("images/side_menu/system_settings.svg"); }
+
+.hamburgler-menu-list li.my-stats-icon > a {
+  background-image: url("images/side_menu/ic_chart.svg");
   /* -------------- forms ------------- */ }
 
 .server-form, .tabs_table {
@@ -510,6 +513,32 @@ table {
 .terms_of_service_text h3 {
   color: #025fbc; }
 
+.music_title_text {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px; }
+
+.selected_music_text {
+  font-size: 14pt; }
+
+.music_list_item {
+  position: relative;
+  list-style-type: none;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+
+ul.music_list {
+  margin-top: 0px;
+  padding-left: 0px; }
+
+.music_list_title_text {
+  font-size: 16pt;
+  padding-top: 20px; }
+
+.hidden {
+  display: none; }
+
 .video_modal_widget {
   background-image: url("widgets/video_modal/play_video.svg");
   background-size: 1.5em 1.5em;
@@ -628,6 +657,7 @@ table {
             <li><a href="#" onclick="navigation_load_page('login')">Switch Accounts</a></li>
           </ul>
         </li>
+        <li class="my-stats-icon"><a href="#" onclick="navigation_load_page('my-stats')">My Stats</a></li>
       </ul>
     </div>
   </div>
@@ -1508,18 +1538,44 @@ var carousel_pages = [
   };
 
 </script>
-<div id="page-playlist" class="page">
+<div id="page-my-stats" class="page">
+   My Stats Page
+</div>
+
+<script>
+    var my_stats_page = new MyStatsPage();
+    GLOBAL_JS_PAGE_OBJECTS["my-stats"] = {id:"page-my-stats", obj:my_stats_page};
+
+    /*--------------------------------------------------------*/
+    function MyStatsPage() {
+
+    }
+
+    /*--------------------------------------------------------*/
+    MyStatsPage.prototype.page_will_unload = function() {
+
+    };
+
+    /*--------------------------------------------------------*/
+    MyStatsPage.prototype.page_load = function() {
+
+    };
+
+    /*--------------------------------------------------------*/
+    MyStatsPage.prototype.page_did_unload = function() {
+
+    };
+
+</script><div id="page-playlist" class="page">
 
     <!-- AUDERO AUDIO PLAYER -->
 
-    <div class="server-form"><button class="input-field button" id="update-button">UPDATE LIST</button></div>
-
-    <div>
+    <form class="server-form"> <!-- todo remove server form and change style for it -->
         <input class="input-field" type="text" placeholder="Search songs" onkeyup="playlist_page.onTextChange(this.value)" name="song_search" >
-    </div>
+    </form>
 
-    <div>Selected playlist item</div>
-    <div id="selectedMusicFile"></div>
+    <h2 class="music_title_text">Selected game song</h2>
+    <div class="selected_music_text" id="selectedMusicFile"></div>
 <!-- //TODO DO THIS LATER FOR MULTI SELECT -->
 <!--    <div>Play list</div>-->
 <!--    <div id="noPlaylistItems"></div>-->
@@ -1528,14 +1584,15 @@ var carousel_pages = [
 <!--        </ul>-->
 <!--    </div>-->
 
-    <div id="noOtherMusicItems"></div>
+    <div class="music_list_title_text">Music list</div>
+    <div class="hidden" id="noOtherMusicItems">No music found</div>
     <div data-role="content">
-        <ul id="otherMusic-list" data-role="listview" data-autodividers="true" data-filter="true">
+        <ul class="music_list" id="otherMusic-list" data-role="listview" data-autodividers="true" data-filter="true">
         </ul>
     </div>
 
     <div id="waiting-popup" data-role="popup" data-position-to="window" data-dismissible="false">
-        <header id="updatingHeader" data-role="header">
+        <header data-role="header">
             Updating
         </header>
         <div data-role="content">
@@ -1633,17 +1690,24 @@ var carousel_pages = [
 
     Playlist.prototype._populateUserMusicListAndDisplayLists = function() {
         var userMusicService = new User_Music_Service();
-        userMusicService.getAllMusicFilesOnDevice([
-            //OTHER POSSIBLES ARE
-            //cordova.file.dataDirectory,
-            //cordova.file.documentsDirectory,
-            //cordova.file.externalApplicationStorageDirectory,
-            //cordova.file.externalCacheDirectory,
-            cordova.file.externalRootDirectory
-            //cordova.file.externalDataDirectory
-            //cordova.file.sharedDirectory,
-            //cordova.file.syncedDataDirectory
-        ], playlist_page._onFoundFileItems);
+
+        if (typeof cordova === 'undefined') {
+            console.log("CORDOVA IS NOT AVAILABLE");
+            return;
+        }
+
+        if (cordova.platformId === "android") {
+            userMusicService.getAllMusicFilesOnDevice([
+                cordova.file.applicationDirectory,
+                cordova.file.externalRootDirectory
+            ], playlist_page._onFoundFileItems);
+        } else if (cordova.platformId === "ios") {
+            userMusicService.getAllMusicFilesOnDevice([
+                cordova.file.dataDirectory
+            ], playlist_page._onFoundFileItems);
+        } else {
+            console.log("Not sure how you got here. What platform are you using?");
+        }
     };
 
     Playlist.prototype._updatePlaylistAndMusicList = function() {
@@ -1692,16 +1756,16 @@ var carousel_pages = [
         var otherMusicListListInnerHTML = "";
 
         if (searchedFileItems.length === 0) {
-            noOtherMusicItemsDiv.innerHTML = "No music found on device.";
+            noOtherMusicItemsDiv.setAttribute("class", "");
             otherMusicList.innerHTML = "";
         } else {
             var i;
             for (i = 0; i < searchedFileItems.length; i++) {
                 var fileItem = searchedFileItems[i];
-                otherMusicListListInnerHTML += "<li onclick=\"playlist_page.onMusicFileSelected(\'" + fileItem.fileLocation + "\', \'" + fileItem.fileName + "\')\">" + fileItem.fileName + "</li>";
+                otherMusicListListInnerHTML += "<li class=\"music_list_item\" onclick=\"playlist_page.onMusicFileSelected(\'" + fileItem.fileLocation + "\', \'" + fileItem.fileName + "\')\">" + fileItem.fileName + "</li>";
             }
 
-            noOtherMusicItemsDiv.innerHTML = "";
+            noOtherMusicItemsDiv.setAttribute("class", "hidden");
             otherMusicList.innerHTML = otherMusicListListInnerHTML;
         }
     };
@@ -1743,8 +1807,8 @@ var carousel_pages = [
 
     Playlist.prototype._onFoundFileItems = function(fileItems) {
 
-        var updatingHeader = document.getElementById("updatingHeader");
-        updatingHeader.innerHTML = "";
+        var updatingElement = document.getElementById("waiting-popup");
+        updatingElement.setAttribute("class", "hidden");
 
         var userMusicService = new User_Music_Service();
 
@@ -1907,7 +1971,7 @@ var carousel_pages = [
 </script>
 <div class="page" id="routine-rollkick">
   <audio id="audio_player_page_a" style="display:none" loop>
-    <source src="sounds/music.mp3" type="audio/mpeg" />
+    <source src="sounds/Driving.mp3" type="audio/mpeg" />
   </audio>
   <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="navigation_load_page('playlist');">&#xf46c;</div>
   <span class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
@@ -2205,7 +2269,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1515028828";
+var $VERSION = "1515637498";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"V's","speedometer_level_text":"v's","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -3342,8 +3406,16 @@ Audio_File_Player.prototype.stop = function(gain)
 {
   if(this.source_type == "buffer")
     {
+      //todo: how to tell if the object was in an invalid state
+      //we are getting errors on Safari, but state has been deprecated elsewhere.
+      console.log(this.audio_source);
       if(this.audio_source)
-        this.audio_source.stop();
+        {
+          if(this.audio_source.playbackState != 3)
+            this.audio_source.stop();
+          else
+            console.log("AUDIO STOP was in an invlaid state");
+        }
     }
   else if(this.source_type == "cordova")
     this.cordova_media.stop();
@@ -3539,11 +3611,29 @@ User_Music_Service.prototype.SELECTED_MUSIC_FILE = "SELECTED_MUSIC_FILE";
 User_Music_Service.prototype.getAllMusicFilesOnDevice = function(urls, callback) {
     console.log("getAllMusicFiles");
     var self = this;
-
-    //TODO find a way to have URLS in this class not be passed in
     self.LOCAL_URLS = urls;
+    self.index = 0;
 
     var fileItems = [];
+
+    var doNext = function (fileItems) {
+        while (!self.LOCAL_URLS[self.index] && self.index < self.LOCAL_URLS.length) {
+            self.index++;
+        }
+
+        if (self.index === self.LOCAL_URLS.length) {
+            callback(fileItems);
+        } else {
+            self.processFile(doNext, fileItems);
+        }
+    };
+    doNext(fileItems);
+};
+
+User_Music_Service.prototype.processFile = function(callback, fileItems) {
+    console.log("getAllMusicFiles");
+    var self = this;
+
     var numOfEntries = 0;
     var doneCalled = false;
 
@@ -3570,7 +3660,8 @@ User_Music_Service.prototype.getAllMusicFilesOnDevice = function(urls, callback)
                         var fileLocation = entries[j].nativeURL;
 
                         if (self._isMusicFilePath(fileLocation)) {
-                            var fileItem = self._createSelectedMusicFile(fileLocation, fileName);
+                            var trimmedSongName = self._trimFilePath(fileName);
+                            var fileItem = self._createSelectedMusicFile(fileLocation, trimmedSongName);
 
                             fileItems.push(fileItem);
                         }
@@ -3579,6 +3670,7 @@ User_Music_Service.prototype.getAllMusicFilesOnDevice = function(urls, callback)
 
                 if (numOfEntries === 0 && !doneCalled) {
                     doneCalled = true;
+                    self.index++;
                     callback(fileItems);
                 }
             },
@@ -3592,8 +3684,9 @@ User_Music_Service.prototype.getAllMusicFilesOnDevice = function(urls, callback)
         console.log("error2: " + error);
     };
 
-    numOfEntries++;
-    window.resolveLocalFileSystemURL(self.LOCAL_URLS[0], addFileEntry, addError);
+    numOfEntries = 1;
+
+    window.resolveLocalFileSystemURL(self.LOCAL_URLS[self.index], addFileEntry, addError);
 };
 
 User_Music_Service.prototype.getSelectedMusicFile = function() {
@@ -3661,12 +3754,20 @@ User_Music_Service.prototype._createSelectedMusicFile = function(fileLocation, f
     return selectedMusicFile;
 };
 
+User_Music_Service.prototype._trimFilePath = function(filePath) {
+    return filePath.slice(0, filePath.length - 4);
+};
+
 User_Music_Service.prototype._isMusicFilePath = function(filePath) {
     //TODO figure out what file types we support
-    if (filePath.includes(".mp3")) { // || filePath.includes(".wav") || filePath.includes(".wma")) {
-        return true;
-    }
-    return false;
+    var regTester = ".mp3$";
+    var exists = new RegExp(regTester).test(filePath);
+
+    return exists;
+    // if (filePath.includes(".mp3")) { // || filePath.includes(".wav") || filePath.includes(".wma")) {
+    //     return true;
+    // }
+    // return false;
 };
 /*-_----------_-_----------------_-_---_-------------------_----_-------   _
   | |__  __ _| | |  _ __  ___ __(_) |_(_)___ _ _   __ __ _(_)__| |__ _ ___| |_ 
@@ -5936,7 +6037,7 @@ function Rollkick_Page_Template(IC, video_modal_id, time_dial_id, kicks_dial_id,
     var selectedMusicFile = userMusicService.getSelectedMusicFile();
 
     if (!selectedMusicFile) {
-        selectedPath = "sounds/music.mp3";
+        selectedPath = "sounds/Driving.mp3";
     } else {
         selectedPath = selectedMusicFile.fileLocation;
     }
