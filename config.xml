@@ -4,6 +4,9 @@
     <description>Inside Coach App</description>
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
     <icon src="www/images/icon.png" />
+	<icon src="www/images/icon57.png" gap:platform="ios" width="57" height="57" />
+	<icon src="www/images/icon120.png" gap:platform="ios" width="120" height="120" />	
+	<icon src="www/images/icon152.png" gap:platform="ios" width="152" height="152" />
     <access origin="*" />
     <preference name="exit-on-suspend" value="true" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
