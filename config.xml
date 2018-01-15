@@ -12,4 +12,5 @@
     <preference name="exit-on-suspend" value="true" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
     <plugin name="cordova-plugin-file" spec="~5.0.0" />
+    <plugin name="cordova-plugin-android-permissions" source="npm" version="0.10.0" />
 </widget>
