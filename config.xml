@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.insidecoach.app" version="100.222.333.450" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.insidecoach.app" version="100.222.333.451" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Inside Coach</name>
     <description>Inside Coach App</description>
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
@@ -12,7 +12,5 @@
     <preference name="exit-on-suspend" value="true" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
     <plugin name="cordova-plugin-file" spec="~5.0.0" />
-    
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <plugin name="cordova-plugin-camera" />
 </widget>
