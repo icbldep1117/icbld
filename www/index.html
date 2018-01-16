@@ -1024,7 +1024,7 @@ ul.music_list {
     <input class="input-field" type="text" placeholder="Phone No" name="phone_no">
     
     <label for="upload" class="input-field button" style="line-height:40px">Choose your avatar</label>
-    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="image/*" capture="camera">
+    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="audio/*">
     <input class="input-field button" type="hidden"  id="uploaded_image" name="uploaded_image">
     
     <button type="submit" name="submit" id="edit_profile_button" class="input-field button" onclick="edit_profile.update_account(event, this.form)">Submit Changes</button>
