@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.insidecoach.app" version="100.222.333.452" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.insidecoach.app" version="100.222.333.444" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Inside Coach</name>
     <description>Inside Coach App</description>
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
@@ -10,7 +10,6 @@
 	<icon src="www/images/icon152.png" gap:platform="ios" width="152" height="152" />
     <access origin="*" />
     <preference name="exit-on-suspend" value="true" />
-    <plugin name="cordova-plugin-file" spec="5.0.0" />
-    <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
-
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
+    <plugin name="cordova-plugin-file" spec="~5.0.0" />
 </widget>

@@ -1024,7 +1024,7 @@ ul.music_list {
     <input class="input-field" type="text" placeholder="Phone No" name="phone_no">
     
     <label for="upload" class="input-field button" style="line-height:40px">Choose your avatar</label>
-    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="audio/*">
+    <input id="upload" name="profile_image" onchange="edit_profile.get_resized_base_64_image(this)" class="input-field button" style="display:none" type="file" accept="image/*" capture="camera">
     <input class="input-field button" type="hidden"  id="uploaded_image" name="uploaded_image">
     
     <button type="submit" name="submit" id="edit_profile_button" class="input-field button" onclick="edit_profile.update_account(event, this.form)">Submit Changes</button>
@@ -1972,7 +1972,14 @@ var carousel_pages = [
   <audio id="audio_player_page_a" style="display:none" loop>
     <source src="sounds/Driving.mp3" type="audio/mpeg" />
   </audio>
-  <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="navigation_load_page('playlist');">&#xf46c;</div>
+
+  <form class="server-form" id="choose_song_form" onsubmit="return false">
+    <label for="choose_song_field" class="input-field button" style="line-height:40px">Choose your song</label>
+    <input id="choose_song_field" name="choose_song" onchange="test_choose_song_handler(this)" class="input-field button" style="display:none" type="file" accept="audio/*">
+    <input class="input-field button" type="hidden"  id="chosen_audio" name="chosen_audio">
+  </form>
+
+  <div class="icon" style="color:#FF7F00; font-size:35px; position:absolute; right:15px; border:2px solid #FF7F00; border-radius:50%; height:35px; width:35px; line-height:100%; cursor:pointer;" onclick="/* navigation_load_page('playlist'); */">&#xf46c;</div>
   <span class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_a">Your ball is not connected</div>
   <canvas id="time_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas><br>
@@ -1991,6 +1998,26 @@ var carousel_pages = [
 
 <script>
   //the js for this file is in js/rollkick_page_template.js
+
+  function test_choose_song_handler(input)
+  {
+    if (typeof FileReader === "undefined")
+      {
+        console.log("FileReader is undefined");
+        return;
+      }
+  
+    if(input.files && input.files[0])
+      {
+        var url = URL.createObjectURL(input.files[0]);
+        rollkick_template.audio_player.stop();
+        rollkick_template.audio_player = new Audio_File_Player(url, this.audio_player_id, true, true);
+        rollkick_template.audio_player.play();
+        rollkick_template.audio_player.set_gain(1.0);
+        console.log(url);
+        console.log(rollkick_template.audio_player)
+      }
+  }
 </script>
 <div id="page-sign-up" class="page">
   <form class="server-form" id="sign_up_form" onsubmit="return false">
@@ -2268,7 +2295,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "1516013377";
+var $VERSION = "1516064944";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
@@ -3234,7 +3261,7 @@ else if('AudioContext' in window)
   global_audio_context = new AudioContext();
 
 /*------------------------------------------------------------*/
-function Audio_File_Player(filename, audio_element_id, should_loop)
+function Audio_File_Player(filename, audio_element_id, should_loop, should_autoplay)
 {
   this.audio_nodes    = {};
   this.audio_buffer   = null;
@@ -3247,6 +3274,7 @@ function Audio_File_Player(filename, audio_element_id, should_loop)
   //this.gain_filter_coeff = 0.001;
   //this.one_minus_gain_filter_coeff = 1 - this.gain_filter_coeff;
   
+  this.should_auto_play = should_autoplay;
   this.cordova_media  = null;
   this.loop           = should_loop;
   
@@ -3376,7 +3404,11 @@ Audio_File_Player.prototype.file_opened_callback = function(event)
       //console.log(request.response);
       //this.audio_buffer = global_audio_context.createBuffer(request.response, false);
       global_audio_context.decodeAudioData(request.response, function(buffer)
-        {this.audio_buffer = buffer;}.bind(this));
+        {
+          this.audio_buffer = buffer;
+          if(this.should_auto_play)
+            this.play();
+        }.bind(this));
       //var source = global_audio_context.createBufferSource();
       //source.buffer = this.audio_buffer;
       //this.connect_audio_source_to_graph(source);
@@ -6120,7 +6152,7 @@ Rollkick_Page_Template.prototype.timer_run_loop = function()
         break;
         
       case Session_Timer.TIMER_NOTIFICATION_DID_RESUME:
-        this.speech_log.display(linguistics.get_random_compliment());
+        this.speech_log.display(speech.get_random_compliment_utterance().text);
         break;
         
       case Session_Timer.TIMER_NOTIFICATION_DID_STOP:
