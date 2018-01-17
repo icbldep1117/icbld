@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.insidecoach.app" version="100.222.333.444" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.insidecoach.app" version="0.0.28" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Inside Coach</name>
     <description>Inside Coach App</description>
     <author email="info@insidecoach.com" href="https://build.phonegap.com">Inside Coach</author>
