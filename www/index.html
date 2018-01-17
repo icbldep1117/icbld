@@ -2054,6 +2054,7 @@ var carousel_pages = [
     navigation_load_page("login");
   }
 </script>
+<<<<<<< HEAD
 <div class="page" id="routine-cones">
   <span class="video_modal_container" onclick="cone_weaving_template.video_modal.show_modal()"><div id="video_modal_page_c" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
   <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
@@ -2093,6 +2094,47 @@ var carousel_pages = [
 <script>
   //the js for this file is in js/freeplay_page_template.js
 </script>
+=======
+<div class="page" id="routine-cones">
+  <span class="video_modal_container" onclick="cone_weaving_template.video_modal.show_modal()"><div id="video_modal_page_c" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
+  <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
+  <canvas id="ball_position_page_c" class="ball_position_widget" width="900" height="600"></canvas><br>
+  <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();$IC.start_tracking();">RESET GAME</button></div>
+  <table id="score_log_page_c" class="socore_log_widget"></table>
+</div> <!-- page routine-cones -->
+
+<script>
+  //the js for this file is in js/cone_weaving_page_template.js
+</script>
+<div class="page" id="routine-flightkick">
+  <span class="video_modal_container" onclick="flightkick_template.video_modal.show_modal()"><div id="video_modal_page_b" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
+  <div id="speech_log_page_b" class="speech_log_widget">The ball is not connected.</div>
+  <canvas id="distance_dial_page_b" class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
+  <canvas id="height_dial_page_b"   class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
+  <canvas id="speed_dial_page_b"    class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
+  <canvas id="spin_dial_page_b"     class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
+  <div id="ball_position_page_b" style="margin:-30px auto 0px auto;"></div><br>
+  <div class="server-form"><button class="input-field button" onclick="flightkick_template.clear();$IC.start_tracking();">RESET GAME</button></div>
+  <table id="score_log_page_b" class="score_log_widget"></table>
+</div>
+
+<script>
+  //the js for this file is in js/flightkick_page_template.js
+</script>
+<div class="page" id="routine-freeplay">
+  <span class="video_modal_container" onclick="freeplay_template.video_modal.show_modal()"><div id="video_modal_page_d" class="video_modal_widget"></div>&nbsp;Watch Training</span><br>
+  <div class="speech_log_widget" id="speech_log_page_d">Your ball is not connected</div>
+  <canvas id="time_dial_page_d"     class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
+  <canvas id="distance_dial_page_d" class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
+  <canvas id="ball_position_page_d" class="ball_position_widget" width="900" height="600"></canvas><br>
+  <div class="server-form"><button class="input-field button" onclick="freeplay_template.clear();$IC.start_tracking();">RESET GAME</button></div>
+  <table id="score_log_page_d" class="score_log_widget"></table>
+</div> <!-- page routine-freeplay -->
+
+<script>
+  //the js for this file is in js/freeplay_page_template.js
+</script>
+>>>>>>> fe4739c3f3aabde8cf23734ae875058416b2bc38
 <div class="page" id="routine-rollkick">
   <audio id="audio_player_page_a" style="display:none" loop>
     <source src="music/Driving.mp3" type="audio/mpeg" />
@@ -2417,7 +2459,11 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
+<<<<<<< HEAD
 var $VERSION = "1516228433";
+=======
+var $VERSION = "1516166425";
+>>>>>>> fe4739c3f3aabde8cf23734ae875058416b2bc38
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"}};
