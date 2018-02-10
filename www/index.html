@@ -3025,7 +3025,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "10 Feb 2018 5:59:49";
+var $VERSION = "10 Feb 2018 20:41:00";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Funny Sounds":{"type":"funny sounds","menu_parent":"Dribbling"}};
@@ -8166,7 +8166,9 @@ Speech.NUM_DECIMAL_DIGITS = 5; //precision when speaking real numbers
 /*--------------------------------------------------------------------*/
 Speech.compliments =
   [
-    new Audio_File_Player('sounds/speech/mono_mp3/compliments/a_job_well_done.mp3', null),
+    new Audio_File_Player('sounds/speech/mono_mp3/compliments/I\'m_impressed.mp3', null),
+	new Audio_File_Player('sounds/speech/mono_mp3/compliments/I_knew_you_had_it_in_you.mp3', null),
+	new Audio_File_Player('sounds/speech/mono_mp3/compliments/a_job_well_done.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/a_plus_effort.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/alright.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/amazing_effort.mp3', null),
@@ -8194,8 +8196,6 @@ Speech.compliments =
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/hats_off_to_you.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/how_extraordinary.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/hurray_for_you.mp3', null),
-	new Audio_File_Player('sounds/speech/mono_mp3/compliments/i\'m_impressed.mp3', null),
-	new Audio_File_Player('sounds/speech/mono_mp3/compliments/i_knew_you_had_it_in_you.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/incredible.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/keep_it_up.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/keep_up_the_good_work.mp3', null),
@@ -8227,7 +8227,7 @@ Speech.compliments =
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/that\'s_incredible.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/that\'s_perfect.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/that\'s_the_way.mp3', null),
-	new Audio_File_Player('sounds/speech/mono_mp3/compliments/that_was_everything_i_hoped_for.mp3', null),
+	new Audio_File_Player('sounds/speech/mono_mp3/compliments/that_was_everything_I_hoped_for.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/the_time_you_put_in_really_shows.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/top_notch.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/tremendous.mp3', null),
@@ -8240,9 +8240,9 @@ Speech.compliments =
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/what_a_genius.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/wonderful.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/wow.mp3', null),
+	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_A_OK.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_a_champ.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_a_natural.mp3', null),
-	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_a_ok.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_a_winner.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_amazing.mp3', null),
 	new Audio_File_Player('sounds/speech/mono_mp3/compliments/you\'re_getting_better.mp3', null),
