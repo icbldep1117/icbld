@@ -624,6 +624,8 @@ ul.music_list {
   color: #ff7c00; }
 
 .carousel_dot {
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 10px;
   height: 10px;
   display: inline-block;
@@ -2936,12 +2938,12 @@ Speedometer_Widget.prototype.interpolation_thread_run_loop_run = function()
   <div class="carousel_body">
     <div class="carousel_content" id="carousel_content">
       <div class="carousel_dots_div">
-        <span class="icon" style="float:left; cursor:pointer; font-size:2em;" onclick="carousel.prev_page()">&#xf3d2;</span>
-        <div class="carousel_dot .carousel_dot_active"></div>
-        <div class="carousel_dot"></div>
-        <div class="carousel_dot"></div>
-        <div class="carousel_dot"></div>
-        <span class="icon" style="float:right; cursor:pointer; font-size:2em;" onclick="carousel.next_page()">&#xf3d3;</span>
+          <span class="icon" style="float:left; cursor:pointer; font-size:2em; padding: 10px;" onclick="carousel.prev_page()">&#xf3d2;</span>
+          <div class="carousel_dot .carousel_dot_active"></div>
+          <div class="carousel_dot"></div>
+          <div class="carousel_dot"></div>
+          <div class="carousel_dot"></div>
+          <span class="icon" style="float:right; cursor:pointer; font-size:2em; padding: 10px" onclick="carousel.next_page()">&#xf3d3;</span>
       </div>
       <div class="carousel_top_text_div">Welcome to Inside Coach!</div>
       <div class="carousel_image_div">
@@ -2988,7 +2990,7 @@ var carousel_pages = [
    var CAROUSEL_LOCAL_STORAGE_NAME = "GLOBAL_CAROUSEL_STORAGE"
    var carousel = new CarouselPage();
    GLOBAL_JS_PAGE_OBJECTS["setup-guide"] = {id:"page-intro-carousel", obj:carousel};
-   
+
   /*--------------------------------------------------------*/
   function CarouselPage()
   {
@@ -3007,13 +3009,13 @@ var carousel_pages = [
   {
     this.display_page(0);
   };
-      
+
   /*--------------------------------------------------------*/
   CarouselPage.prototype.page_did_unload = function()
   {
 
   };
-  
+
   /*--------------------------------------------------------*/
   CarouselPage.prototype.display_page = function(page_number)
   {
@@ -3027,14 +3029,14 @@ var carousel_pages = [
     var dots_div    = this.content.getElementsByClassName("carousel_dots_div")[0];
     var dots        = dots_div.getElementsByClassName("carousel_dot");
     var arrows      = dots_div.getElementsByClassName("icon");
-  
+
     var content = carousel_pages[page_number];
     top_text.innerHTML = content.top_text;
     bottom_text.innerHTML = content.bottom_text;
     image.src = content.main_image;
     image.style.width = content.image_width;
     image.style.display = content.image_display;
-  
+
     for(i=0; i<dots.length; i++)
       {
         if(i == page_number)
@@ -3043,7 +3045,7 @@ var carousel_pages = [
           dots[i].className = "carousel_dot";
       }
     this.current_page = page_number;
-  
+
     arrows[0].style.color = (page_number == 0) ? "transparent" : "inherit";
     arrows[1].style.color = (page_number == carousel_pages.length-1) ? "transparent" : "inherit";
   }
@@ -3064,13 +3066,13 @@ var carousel_pages = [
   CarouselPage.prototype.lets_do_this = function()
   {
     localStorage.setItem(CAROUSEL_LOCAL_STORAGE_NAME, JSON.stringify({viewed:true}));
-    
+
     if(navigation_has_back_history())
       navigation_go_back();
     else
       navigation_load_page("games");
   }
-  
+
   /*--------------------------------------------------------*/
   CarouselPage.prototype.has_been_fully_viewed = function()
   {
@@ -4370,7 +4372,7 @@ var carousel_pages = [
 /FOR_BUILD_ONLY-->
 <script>
 
-var $VERSION = "13 Mar 2018 4:19:43";
+var $VERSION = "15 Mar 2018 2:40:12";
 
 /**** ALL JS ****/
 var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals"},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals"},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":4,"mode":0,"menu_parent":"Fundamentals"},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Funny Sounds":{"type":"funny sounds","menu_parent":"Dribbling"},"Passkick":{"type":"passkick","menu_parent":"Kicks"},"Topspin":{"type":"topspin","menu_parent":"Kicks"},"Force Kick":{"type":"forcekick","menu_parent":"Kicks"}};
@@ -6732,91 +6734,106 @@ String.prototype.initCap = function ()
 };
 
 /*-----_----_-------------------------_------_----------_----_----------_
-  __ _(_)__| |___ ___   _ __  ___  __| |__ _| | __ __ _(_)__| |__ _ ___| |_ 
-  \ V / / _` / -_) _ \ | '  \/ _ \/ _` / _` | | \ V  V / / _` / _` / -_)  _|
-   \_/|_\__,_\___\___/ |_|_|_\___/\__,_\__,_|_|  \_/\_/|_\__,_\__, \___|\__|
---------------------------------------------------------------|___/-----  
-----------------------------------------------------------------------*/
+ __ _(_)__| |___ ___   _ __  ___  __| |__ _| | __ __ _(_)__| |__ _ ___| |_
+ \ V / / _` / -_) _ \ | '  \/ _ \/ _` / _` | | \ V  V / / _` / _` / -_)  _|
+ \_/|_\__,_\___\___/ |_|_|_\___/\__,_\__,_|_|  \_/\_/|_\__,_\__, \___|\__|
+ --------------------------------------------------------------|___/-----
+ ----------------------------------------------------------------------*/
 
 //PUBLIC
 /*--------------------------------------------------------------------*/
 function Video_Modal_Widget(button_id, video_path)
 {
-  this.open_modal_button = document.getElementById(button_id);
-  this.video_modal_div = document.createElement("DIV");
-  this.video_modal_div.style.display           = "none";
-  this.video_modal_div.style.position          = "fixed";
-  this.video_modal_div.style.zIndex            = "10";
-  this.video_modal_div.style.left              = "0px";
-  this.video_modal_div.style.top               = "0px";
-  this.video_modal_div.style.width             = "100%";
-  this.video_modal_div.style.height            = "100%";
-  this.video_modal_div.style.overflow          = "auto";
-  this.video_modal_div.style.backgroundColor   = "rgba(0, 0, 0, 0.4)";
-  
-  this.modal_content_div = document.createElement("DIV");
-  //this.modal_content_div.style.backgroundColor = "#fefefe";
-  this.modal_content_div.style.position        = "absolute";
-  this.modal_content_div.style.top             = "0px";
-  this.modal_content_div.style.left            = "0px";
-  this.modal_content_div.style.width           = "100%";
-  this.modal_content_div.style.height          = "100%";
-  this.modal_content_div.style.textAlign       = "center";
-  this.modal_content_div.style.display         = "block";
-  
-  this.modal_video = document.createElement("VIDEO");
-  this.modal_video.src                         = video_path;
-  this.modal_video.style.position              = "absolute";
-  this.modal_video.style.left                  = "0px";
-  this.modal_video.style.top                   = "0px";
-  this.modal_video.style.width                 = "100%";
-  this.modal_video.style.height                = "100%";
-  this.modal_video.style.backgroundColor       = "rgba(0, 0, 0, 0.8)";
-  
-  this.close_modal_button = document.createElement("DIV");
-  this.close_modal_button.style.color          = "#888";
-  this.close_modal_button.style.fontSize       = "28px";
-  this.close_modal_button.style.fontWeight     = "bold";
-  this.close_modal_button.style.position       = "relative";
-  this.close_modal_button.style.backgroundColor= "black";
-  this.close_modal_button.style.cursor         = "pointer";
-  this.close_modal_button.innerHTML            = "DISMISS";
-  //todo: make hover and focus white, make it look clickable for
-  //devices with no hover / click
-  //also, the button will cover the top of the video in landscape mode
-  
-  this.modal_content_div.appendChild(this.modal_video       );
-  this.modal_content_div.appendChild(this.close_modal_button);
-  this.video_modal_div.appendChild  (this.modal_content_div );
-  document.body.appendChild         (this.video_modal_div   );
-  
-  this.close_modal_button.onclick = this.hide_modal.bind(this);
-  //this.open_modal_button.onclick  = this.show_modal.bind(this);
+    this.open_modal_button = document.getElementById(button_id);
+
+    this.video_modal_div = document.createElement("DIV");
+
+    this.video_modal_div.id          = "video_modal_div";
+    this.video_modal_div.style.display           = "none";
+    this.video_modal_div.style.position          = "fixed";
+    this.video_modal_div.style.zIndex            = "10";
+    this.video_modal_div.style.left              = "0px";
+    this.video_modal_div.style.top               = "0px";
+    this.video_modal_div.style.width             = "100%";
+    this.video_modal_div.style.height            = "100%";
+    this.video_modal_div.style.overflow          = "auto";
+    this.video_modal_div.style.backgroundColor   = "rgba(0, 0, 0, 0.4)";
+
+    this.modal_content_div = document.createElement("DIV");
+    //this.modal_content_div.style.backgroundColor = "#fefefe";
+    this.modal_content_div.id          = "modal_content_div";
+    this.modal_content_div.style.position        = "absolute";
+    this.modal_content_div.style.top             = "0px";
+    this.modal_content_div.style.left            = "0px";
+    this.modal_content_div.style.width           = "100%";
+    this.modal_content_div.style.height          = "100%";
+    this.modal_content_div.style.textAlign       = "center";
+    this.modal_content_div.style.display         = "block";
+
+    this.modal_video_container = document.createElement("DIV");
+    this.modal_video_container.id                          = "modal_video_container";
+    this.modal_video_container.style.position              = "absolute";
+    this.modal_video_container.style.width                 = "100%";
+    this.modal_video_container.style.height                = "100%";
+    this.modal_video_container.style.left                  = "0px";
+    this.modal_video_container.style.top                   = "0px";
+    this.modal_video_container.style.backgroundColor       = "rgba(0, 0, 0, 0.8)";
+
+    this.modal_video_container.innerHTML = "<video width='100%' height='100%' src='" + video_path + "' webkit-playsinline playsinline id='video_id' style='left:\"0px\"; top:\"0px\"; position: \"absolute\"; '></video>";
+
+    this.close_modal_button = document.createElement("DIV");
+    this.close_modal_button.style.color          = "#fff";
+    this.close_modal_button.id          = "close_modal_button";
+    this.close_modal_button.style.fontSize       = "28px";
+    this.close_modal_button.style.fontWeight     = "bold";
+    this.close_modal_button.style.position       = "relative";
+    this.close_modal_button.style.backgroundColor= "black";
+    this.close_modal_button.style.cursor         = "pointer";
+    this.close_modal_button.style["padding-top"] = "20px";
+    this.close_modal_button.style["padding-bottom"] = "20px";
+    this.close_modal_button.innerHTML            = "DISMISS";
+    //todo: make hover and focus white, make it look clickable for
+    //devices with no hover / click
+    //also, the button will cover the top of the video in landscape mode
+
+    this.modal_content_div.appendChild(this.modal_video_container);
+    this.modal_content_div.appendChild(this.close_modal_button);
+    this.video_modal_div.appendChild  (this.modal_content_div );
+    document.body.appendChild         (this.video_modal_div   );
+
+    this.close_modal_button.onclick = this.hide_modal.bind(this);
+    //this.open_modal_button.onclick  = this.show_modal.bind(this);
 }
 
 //PUBLIC
 /*--------------------------------------------------------------------*/
 Video_Modal_Widget.prototype.show_modal = function()
 {
-  this.video_modal_div.style.display = "block";
-  this.modal_video.play();
+    this.video_modal_div.style.display = "block";
+    document.getElementById("video_id").play();
 };
 
 //PUBLIC
 /*--------------------------------------------------------------------*/
 Video_Modal_Widget.prototype.hide_modal = function()
 {
-  this.video_modal_div.style.display = "none";
-  this.modal_video.pause();
-  this.modal_video.currentTime = 0;
+    this.video_modal_div.style.display = "none";
+    document.getElementById("video_id").pause();
+    document.getElementById("video_id").currentTime = 0;
 };
 
 //PUBLIC
 /*--------------------------------------------------------------------*/
 Video_Modal_Widget.prototype.set_video = function(video_path)
 {
-  this.modal_video.src = video_path;
-  this.modal_video.load();
+    var self = this;
+
+    document.getElementById("video_id").src = video_path;
+    document.getElementById("video_id").load();
+
+    document.getElementById('video_id').addEventListener('ended', () => {
+        self.hide_modal();
+    }, false);
 };
 
 /*---------_-_-_--------_---------------------------_------------------_      _
