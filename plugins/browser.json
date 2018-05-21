@@ -1,18 +1,24 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.insidecoach.app"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-google-analytics": {
+      "PACKAGE_NAME": "com.insidecoach.app"
     },
-    "installed_plugins": {
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.insidecoach.app"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.insidecoach.app"
-        }
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.insidecoach.app"
     },
-    "dependent_plugins": {}
+    "phonegap-plugin-speech-synthesis": {
+      "PACKAGE_NAME": "com.insidecoach.app"
+    }
+  },
+  "dependent_plugins": {}
 }
