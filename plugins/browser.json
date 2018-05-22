@@ -10,9 +10,6 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.insidecoach.app"
     },
-    "cordova-plugin-google-analytics": {
-      "PACKAGE_NAME": "com.insidecoach.app"
-    },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.insidecoach.app"
     },
