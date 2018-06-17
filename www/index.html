@@ -339,7 +339,10 @@ body .hamburgler-active {
   background-image: url("images/side_menu/system_settings.svg"); }
 
 .hamburgler-menu-list li.my-stats-icon > a {
-  background-image: url("images/side_menu/ic_chart.svg");
+  background-image: url("images/side_menu/ic_chart.svg"); }
+
+.hamburgler-menu-list li.app-settings-icon > a {
+  background-image: url("images/side_menu/ic_settings.svg");
   /* -------------- forms ------------- */ }
 
 .server-form, .tabs_table {
@@ -576,15 +579,6 @@ ul.music_list {
 
 .hidden {
   display: none !important;
-  /*Challenge*/ }
-
-#challenge_wrapper {
-  text-align: center; }
-
-#select_challenge {
-  font-size: 16px;
-  display: block;
-  margin: 10px auto 20px;
   /*Time LCD*/ }
 
 #time_lcd {
@@ -669,6 +663,139 @@ ul.music_list {
 
 .secondary-text {
   color: #ff7c00;
+  /****** Toggle *******/ }
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px; }
+
+.switch input {
+  display: none; }
+
+.toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s; }
+
+.toggle:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s; }
+
+input:checked + .toggle {
+  background-color: #025fbc; }
+
+input:focus + .toggle {
+  box-shadow: 0 0 1px #025fbc; }
+
+input:checked + .toggle:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+  /* Rounded toggles */ }
+
+.toggle.round {
+  border-radius: 34px; }
+
+.toggle.round:before {
+  border-radius: 50%; }
+
+.settings_label {
+  padding-right: 20px;
+  font-size: 16pt;
+  /********** SELECT *********/ }
+
+.select-text {
+  position: relative;
+  font-family: inherit;
+  background-color: transparent;
+  width: 350px;
+  padding: 10px 10px 10px 0;
+  font-size: 18px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+.select {
+  margin-top: 20px;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  position: relative;
+  width: 350px; }
+
+.select .select-text {
+  appearance: none;
+  -webkit-appearance: none; }
+
+.select:after {
+  position: absolute;
+  top: 18px;
+  /* Styling the down arrow */
+  right: 10px;
+  width: 0;
+  height: 0;
+  padding: 0;
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  /* LABEL ======================================= */ }
+
+.select-label {
+  color: rgba(0, 0, 0, 0.26);
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 0;
+  top: 10px;
+  transition: 0.2s ease all;
+  /* active state */ }
+
+.select-text:focus ~ .select-label, .select-text:valid ~ .select-label {
+  top: -20px;
+  transition: 0.2s ease all;
+  font-size: 14px;
+  /* BOTTOM BARS ================================= */ }
+
+.select-bar {
+  position: relative;
+  display: block;
+  width: 350px; }
+
+.select-bar:before {
+  left: 50%; }
+
+.select-bar:after {
+  right: 50%;
+  /* active state */ }
+
+.select-text:focus ~ .select-bar:before, .select-text:focus ~ .select-bar:after {
+  width: 50%;
+  /* HIGHLIGHTER ================================== */ }
+
+.select-highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
   /******     Modern containers     ******/ }
 
 .flex-vertical {
@@ -982,6 +1109,9 @@ Audio_File_Player.prototype.create_cordova_plugin_source = function(filename)
 /*------------------------------------------------------------*/
 Audio_File_Player.prototype.play = function()
 {
+    if (!SoundService.isSoundEnabled()) {
+        return;
+    }
   if(this.source_type == "buffer")
   {
     if(this.audio_buffer !== null)
@@ -1831,10 +1961,65 @@ Speedometer_Widget.prototype.interpolation_thread_run_loop_run = function()
                   <li class=""><a href="#/sync-stats">Sync Stats</a></li>
               </ul>
         </li>
+        <li class="app-settings-icon"><a href="#/app-settings">App Settings</a></li>
 
       </ul>
     </div>
   </div>
+<div id="page-app-settings" class="page">
+    <div class="flex-horizontal">
+        <label class="settings_label">Enable Sounds: </label>
+        <label class="switch">
+            <input id="app_settings_sound" type="checkbox" onclick="app_settings._onSoundClicked(this)">
+            <span class="toggle round"></span>
+        </label>
+    </div>
+</div>
+
+<script>
+    var app_settings = new AppSettings();
+    GLOBAL_JS_PAGE_OBJECTS["app-settings"] = {id:"page-app-settings", obj:app_settings};
+
+    /*--------------------------------------------------------*/
+    function AppSettings()
+    {
+    }
+
+    /*--------------------------------------------------------*/
+    AppSettings.prototype.page_will_unload = function()
+    {
+    };
+
+    /*--------------------------------------------------------*/
+    AppSettings.prototype.page_load = function()
+    {
+        ViewUtil.scrollToTopOfPage();
+
+        app_settings._updateSoundCheckbox();
+
+    };
+
+    /*--------------------------------------------------------*/
+    AppSettings.prototype.page_did_unload = function()
+    {
+    };
+
+    AppSettings.prototype._updateSoundCheckbox = function() {
+        if (SoundService.isSoundEnabled()) {
+            document.getElementById("app_settings_sound").checked = true;
+        } else {
+            document.getElementById("app_settings_sound").checked = false;
+        }
+    };
+
+    /*--------------------------------------------------------*/
+    AppSettings.prototype._onSoundClicked = function(checkBox)
+    {
+        SoundService.enableSound(checkBox.checked);
+        app_settings._updateSoundCheckbox();
+    };
+
+</script>
 <div id="page-wifi-credentials" class="page">
   <form class="server-form" id="wifi_credentials_form" onsubmit="return false">
     <img class="avatar-circle" src="images/default_profile_image.png" alt="IC">
@@ -3263,9 +3448,7 @@ var carousel_pages = [
         </div>
     </form>
     <form class="server-form">
-        <button class="button-secondary" onclick="login_page.logInAsGuestClicked()">
-            Login as Guest
-        </button>
+        <a style="margin-top: 40px" class="button-secondary" href="#/games">Login as Guest</a>
     </form>
 </div>
 
@@ -3307,10 +3490,6 @@ var carousel_pages = [
   LoginPage.prototype.page_did_unload = function()
   {
     navigation_clear_form("login_form");
-  };
-
-  LoginPage.prototype.logInAsGuestClicked = function() {
-      navigate_to("#/games");
   };
 
   /*--------------------------------------------------------*/
@@ -3361,8 +3540,12 @@ var carousel_pages = [
     <div id="main-stats-page">
         <div class="flex-vertical">
             <div class="flex-horizontal">
-                <label>Game: </label>
-                <select id="select_game_list"></select>
+                <div class="select">
+                    <select class="select-text" id="select_game_list"></select>
+                    <span class="select-highlight"></span>
+                    <span class="select-bar"></span>
+                    <label class="select-label">Game</label>
+                </div>
             </div>
 
             <div id="graph-info" class="secondary-text">Tap on the graph dots to see values</div>
@@ -4463,19 +4646,19 @@ var carousel_pages = [
   }
 </script>
 <div class="page" id="routine-cones">
-
-<div class="video_modal_container" onclick="cone_weaving_template.video_modal.show_modal()"><div id="video_modal_page_c" class="video_modal_widget"></div>&nbsp;WATCH TRAINING</div><br>
-  <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
-  <canvas id="ball_position_page_c" class="ball_position_widget" width="900" height="600"></canvas><br>
-  <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();$IC.start_tracking();">RESET GAME</button></div>
-  <table id="score_log_page_c" class="socore_log_widget"></table>
+    <div class="video_modal_container" onclick="cone_weaving_template.onWatchSetupClicked()">&nbsp;WATCH SETUP</div>
+    <div class="video_modal_container" onclick="cone_weaving_template.onWatchTrainingClicked()">&nbsp;WATCH TRAINING</div><br>
+    <div class="speech_log_widget" id="speech_log_page_c">Start when you are ready!</div><br>
+    <canvas id="ball_position_page_c" class="ball_position_widget" width="900" height="600"></canvas><br>
+    <div class="server-form"><button class="input-field button" onclick="cone_weaving_template.clear();$IC.start_tracking();">RESET GAME</button></div>
+    <table id="score_log_page_c" class="socore_log_widget"></table>
 </div> <!-- page routine-cones -->
 
 <script>
   //the js for this file is in js/cone_weaving_page_template.js
 </script>
 <div class="page" id="routine-flightkick">
-  <div class="video_modal_container" onclick="flightkick_template.video_modal.show_modal()"><div id="video_modal_page_b" class="video_modal_widget"></div>&nbsp;WATCH TRAINING</div><br>
+  <div style="display:inline-block" class="video_modal_container" onclick="flightkick_template.video_modal.show_modal()">&nbsp;WATCH TRAINING</div><br>
   <div id="speech_log_page_b" class="speech_log_widget">The ball is not connected.</div>
   <canvas id="distance_dial_page_b" class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas>
   <canvas id="height_dial_page_b"   class="speedometer_widget speedometer_page_b" width="250" height="250"></canvas><br>
@@ -4490,7 +4673,7 @@ var carousel_pages = [
   //the js for this file is in js/flightkick_page_template.js
 </script>
 <div class="page" id="routine-freeplay">
-  <div class="video_modal_container" onclick="freeplay_template.video_modal.show_modal()"><div id="video_modal_page_d" class="video_modal_widget"></div>&nbsp;WATCH TRAINING</div><br>
+  <div class="video_modal_container" onclick="freeplay_template.video_modal.show_modal()">&nbsp;WATCH TRAINING</div><br>
   <div class="speech_log_widget" id="speech_log_page_d">Your ball is not connected</div>
   <canvas id="time_dial_page_d"     class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
   <canvas id="distance_dial_page_d" class="speedometer_widget speedometer_page_d" width="400" height="400"></canvas>
@@ -4503,46 +4686,52 @@ var carousel_pages = [
   //the js for this file is in js/freeplay_page_template.js
 </script>
 <div class="page" id="routine-rollkick">
-  <audio id="audio_player_page_a" style="display:none" loop>
-    <source src="music/Driving.mp3" type="audio/mpeg" />
-  </audio>
+    <audio id="audio_player_page_a" style="display:none" loop>
+        <source src="music/Driving.mp3" type="audio/mpeg" />
+    </audio>
 
-<div style="margin:15px;">
+    <div style="margin:15px;">
+
+        <div class="flex-horizontal" id="challenge_wrapper">
+
+            <div class="select">
+                <select class="select-text" id="select_challenge"></select>
+                <span class="select-highlight"></span>
+                <span class="select-bar"></span>
+                <label class="select-label">Select your Challenge</label>
+            </div>
+        </div>
 
 
-<div id="challenge_wrapper">
-	Select your Challenge:
-	<select id="select_challenge"></select>
-</div>
+        <div style="padding-top: 10px">
+            <div style="display:inline-block" class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div class="video_modal_widget"></div>&nbsp;WATCH</div>
+            <div style="display:inline-block; width:5%;"></div>
+            <div style="display:inline-block" class="video_modal_container" onclick="return navigate_to('#/Song Select');"><div class="video_modal_widget playlist_button"></div>&nbsp;MUSIC</div>
+        </div>
+    </div>
 
+    <!--div class="server-form">
+        <button class="input-field button" onclick="return navigate_to('#/Song Select');" style="width:49%; display:inline-block; float:left;"><span class="icon" style="font-size:1.7em; display:inline; vertical-align:middle; line-height:100%;">&#xf46c;&nbsp;</span><span style="vertical-align:middle; line-height:100%;">Listen</span></button>
+        <button class="input-field button" onclick="rollkick_template.video_modal.show_modal()" style="width:49%; display:inline-block; float:right;"><span class="icon" style="font-size:1.5em; display:inline; vertical-align:middle; line-height:100%;">&#xf215;&nbsp;</span><span style="vertical-align:middle; line-height:100%;">Watch</span></button>
+    </div -->
 
-<div style="display:inline-block" class="video_modal_container" onclick="rollkick_template.video_modal.show_modal()"><div id="video_modal_page_a" class="video_modal_widget"></div>&nbsp;WATCH</div>
-<div style="display:inline-block; width:5%;"></div>
-<div style="display:inline-block" class="video_modal_container" onclick="return navigate_to('#/Song Select');"><div class="video_modal_widget playlist_button"></div>&nbsp;MUSIC</div>
-</div>
+    <div class="speech_log_widget" id="speech_log_page_a">Loading ... </div>
 
-  <!--div class="server-form">
-    <button class="input-field button" onclick="return navigate_to('#/Song Select');" style="width:49%; display:inline-block; float:left;"><span class="icon" style="font-size:1.7em; display:inline; vertical-align:middle; line-height:100%;">&#xf46c;&nbsp;</span><span style="vertical-align:middle; line-height:100%;">Listen</span></button>
-    <button class="input-field button" onclick="rollkick_template.video_modal.show_modal()" style="width:49%; display:inline-block; float:right;"><span class="icon" style="font-size:1.5em; display:inline; vertical-align:middle; line-height:100%;">&#xf215;&nbsp;</span><span style="vertical-align:middle; line-height:100%;">Watch</span></button>
-  </div -->
-  
-  <div class="speech_log_widget" id="speech_log_page_a">Loading ... </div>
-  
-  <div id="time_lcd"><span>00:00</span><button class="reset icon" onclick="rollkick_template.clear(); $IC.start_tracking();">&#xF201;</button></div>
-  
-  <canvas id="kicks_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas>
+    <div id="time_lcd"><span>00:00</span><button class="reset icon" onclick="rollkick_template.clear(); $IC.start_tracking();">&#xF201;</button></div>
 
-  <div style="margin:auto; padding-left:20px; padding-right:20px; text-align:left; position:relative; top:-55px;">
-  <hr>
-    <div style="float:left; color:rgb(140, 144, 148);">Best Score:</div> 
-    <span id="best_score_page_a" style="margin-left:20px;">0 kicks / min for 0:00 minutes</span>
-    <!-- div class="icon" style="float:right; font-size:1.7em; color:rgb(122, 1, 38); position:relative; top:-0.25em;">&#xf3ac;</div -->
-  <hr>
-  </div>
-  <div class="server-form" style="position:relative; top:-45px;">
-      <button class="input-field button" onclick="rollkick_template.clear(); $IC.start_tracking();">RESET GAME</button>
-  </div>
-  <table id="score_log_page_a" class="score_log_widget"></table>
+    <canvas id="kicks_dial_page_a" class="speedometer_widget speedometer_page_a" width="400" height="400"></canvas>
+
+    <div style="margin:auto; padding-left:20px; padding-right:20px; text-align:left; position:relative; top:-55px;">
+        <hr>
+        <div style="float:left; color:rgb(140, 144, 148);">Best Score:</div>
+        <span id="best_score_page_a" style="margin-left:20px;">0 kicks / min for 0:00 minutes</span>
+            <!-- div class="icon" style="float:right; font-size:1.7em; color:rgb(122, 1, 38); position:relative; top:-0.25em;">&#xf3ac;</div -->
+        <hr>
+    </div>
+    <div class="server-form" style="position:relative; top:-45px;">
+        <button class="input-field button" onclick="rollkick_template.clear(); $IC.start_tracking();">RESET GAME</button>
+    </div>
+    <table id="score_log_page_a" class="score_log_widget"></table>
 </div> <!-- page routine-rollkick -->
 
 <script>
@@ -5088,6 +5277,8 @@ var carousel_pages = [
 <script src="src/NetworkService.js"></script>
 <script src="src/UserService.js"></script>
 <script src="src/UpgradeService.js"></script>
+<script src="src/SoundService.js"></script>
+<script src="src/VideoService.js"></script>
 
 <!--   DATA     -->
 <script src="src/data/GameTypes.js"></script>
@@ -5107,10 +5298,10 @@ var carousel_pages = [
 
 <script>
 
-var $VERSION = "22 May 2018 4:51:32";
+var $VERSION = "17 Jun 2018 0:23:43";
 
 /**** ALL JS ****/
-var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 140 taps  in 1 minute","type":"x_in_y","count":140,"duration":60},{"name":"Do 320 taps  in 3 minutes","type":"x_in_y","count":320,"duration":180},{"name":"Do 550 taps  in 5 minutes","type":"x_in_y","count":550,"duration":300}]},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 130 taps  in 1 minute","type":"x_in_y","count":130,"duration":60},{"name":"Do 330 taps  in 3 minutes","type":"x_in_y","count":330,"duration":180},{"name":"Do 460 taps  in 5 minutes","type":"x_in_y","count":460,"duration":300}]},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 110 taps  in 1 minute","type":"x_in_y","count":110,"duration":60},{"name":"Do 250 taps  in 3 minutes","type":"x_in_y","count":250,"duration":180},{"name":"Do 430 taps  in 5 minutes","type":"x_in_y","count":430,"duration":300}]},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 130 taps  in 3 minutes","type":"x_in_y","count":130,"duration":180},{"name":"Do 240 taps  in 5 minutes","type":"x_in_y","count":240,"duration":300}]},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 90 taps  in 3 minutes","type":"x_in_y","count":90,"duration":180},{"name":"Do 170 taps  in 5 minutes","type":"x_in_y","count":170,"duration":300}]},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 15 taps  in 1 minute","type":"x_in_y","count":15,"duration":60},{"name":"Do 40 taps  in 3 minutes","type":"x_in_y","count":40,"duration":180},{"name":"Do 90 taps  in 5 minutes","type":"x_in_y","count":90,"duration":300}]},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 110 taps  in 1 minute","type":"x_in_y","count":110,"duration":60},{"name":"Do 215 taps  in 3 minutes","type":"x_in_y","count":220,"duration":180},{"name":"Do 395 taps  in 5 minutes","type":"x_in_y","count":400,"duration":300}]},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 10 taps  in 1 minute","type":"x_in_y","count":10,"duration":60},{"name":"Do 25 taps  in 3 minutes","type":"x_in_y","count":25,"duration":180},{"name":"Do 50 taps  in 5 minutes","type":"x_in_y","count":50,"duration":300}]},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 110 taps  in 3 minutes","type":"x_in_y","count":110,"duration":180},{"name":"Do 160 taps  in 5 minutes","type":"x_in_y","count":160,"duration":300}]},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Funny Sounds":{"type":"funny sounds","menu_parent":"Dribbling"},"Passkick":{"type":"passkick","menu_parent":"Kicks"},"Topspin":{"type":"topspin","menu_parent":"Kicks"},"Force Kick":{"type":"forcekick","menu_parent":"Kicks"}};
+var $ROUTINES = {"Toe Taps":{"type":"rollkick","video":"videos\/toe_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 140 taps  in 1 minute","type":"x_in_y","count":140,"duration":60},{"name":"Do 320 taps  in 3 minutes","type":"x_in_y","count":320,"duration":180},{"name":"Do 550 taps  in 5 minutes","type":"x_in_y","count":550,"duration":300}]},"Ball Taps Clock":{"type":"rollkick","video":"videos\/ball_taps_clock.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 130 taps  in 1 minute","type":"x_in_y","count":130,"duration":60},{"name":"Do 330 taps  in 3 minutes","type":"x_in_y","count":330,"duration":180},{"name":"Do 460 taps  in 5 minutes","type":"x_in_y","count":460,"duration":300}]},"Brazilian Sole Flicks":{"type":"rollkick","video":"videos\/brazilian_sole_flicks.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":20,"min_duration":0.3,"speedometer_num_text":"FLICKS","speedometer_level_text":"flicks","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 110 taps  in 1 minute","type":"x_in_y","count":110,"duration":60},{"name":"Do 250 taps  in 3 minutes","type":"x_in_y","count":250,"duration":180},{"name":"Do 430 taps  in 5 minutes","type":"x_in_y","count":430,"duration":300}]},"Forward Backward Rolls":{"type":"rollkick","video":"videos\/forward_backward_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 130 taps  in 3 minutes","type":"x_in_y","count":130,"duration":180},{"name":"Do 240 taps  in 5 minutes","type":"x_in_y","count":240,"duration":300}]},"Left Right Front Rolls":{"type":"rollkick","video":"videos\/left_right_rolls.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TOUCHES","speedometer_level_text":"touches","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 90 taps  in 3 minutes","type":"x_in_y","count":90,"duration":180},{"name":"Do 170 taps  in 5 minutes","type":"x_in_y","count":170,"duration":300}]},"Pull Back Taps":{"type":"rollkick","video":"videos\/pull_back_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":4,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 15 taps  in 1 minute","type":"x_in_y","count":15,"duration":60},{"name":"Do 40 taps  in 3 minutes","type":"x_in_y","count":40,"duration":180},{"name":"Do 90 taps  in 5 minutes","type":"x_in_y","count":90,"duration":300}]},"Irish Jig":{"type":"rollkick","video":"videos\/irish_jig.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":4,"min_duration":0.3,"speedometer_num_text":"TAPS","speedometer_level_text":"taps","divide_by":1,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 110 taps  in 1 minute","type":"x_in_y","count":110,"duration":60},{"name":"Do 215 taps  in 3 minutes","type":"x_in_y","count":220,"duration":180},{"name":"Do 395 taps  in 5 minutes","type":"x_in_y","count":400,"duration":300}]},"Single Leg V Taps":{"type":"rollkick","video":"videos\/single_leg_v_taps.mp4","gyro_motion_thresh":0.04,"impact_sensitivity":15,"min_duration":0.3,"speedometer_num_text":"Vs","speedometer_level_text":"vs","divide_by":2,"mode":0,"menu_parent":"Fundamentals","challenges":[{"name":"Do 10 taps  in 1 minute","type":"x_in_y","count":10,"duration":60},{"name":"Do 25 taps  in 3 minutes","type":"x_in_y","count":25,"duration":180},{"name":"Do 50 taps  in 5 minutes","type":"x_in_y","count":50,"duration":300}]},"Wall Kicks":{"type":"rollkick","video":"videos\/wall_kicks.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.3,"speedometer_num_text":"KICKS","speedometer_level_text":"kicks","divide_by":1,"mode":1,"menu_parent":"Kicks","challenges":[{"name":"Do 40 taps  in 1 minute","type":"x_in_y","count":40,"duration":60},{"name":"Do 110 taps  in 3 minutes","type":"x_in_y","count":110,"duration":180},{"name":"Do 160 taps  in 5 minutes","type":"x_in_y","count":160,"duration":300}]},"Penalty Kicks":{"type":"flightkick","video":"videos\/penalty_kicks.mp4","menu_parent":"Kicks","flightkick_mode":"freekick"},"In Out Dribbling":{"type":"cones","video":"videos\/in_out_dribbling.mp4","setup_video":"videos\/in_out_set_up.mp4","menu_parent":"Dribbling"},"Virtual Coach":{"type":"freeplay","video":"videos\/free_play.mp4","menu_parent":"Dribbling"},"2-Person Passes":{"type":"rollkick","video":"videos\/2_person_passes.mp4","gyro_motion_thresh":0.05,"impact_sensitivity":40,"min_duration":0.5,"speedometer_num_text":"PASSES","speedometer_level_text":"passes","divide_by":1,"mode":1,"menu_parent":"Kicks"},"Funny Sounds":{"type":"funny sounds","menu_parent":"Dribbling"},"Passkick":{"type":"passkick","menu_parent":"Kicks"},"Topspin":{"type":"topspin","menu_parent":"Kicks"},"Force Kick":{"type":"forcekick","menu_parent":"Kicks"}};
 /*!
  * Chart.js
  * http://chartjs.org/
@@ -6651,7 +6842,7 @@ function Rollkick_Page_Template(IC, video_modal_id, time_dial_id, kicks_dial_id,
 {
   //this.transport                           = new Transport_Widget    (IC, transport_id, widgets_directory);
   //this.ball_status                       = new Ball_Status_Widget  (ball_status_id, widgets_directory);
-  this.video_modal                         = new Video_Modal_Widget  (video_modal_id, ""); //set the video src when the page loads
+  this.video_modal                         = VideoService.getVideoModal() //set the video src when the page loads
 
   
   this.kicks_dial                          = new Speedometer_Widget(kicks_dial_id, "kicks", "KICKS", "", Speedometer_Widget.STYLE_SPEEDOMETER, Speedometer_Widget.GOAL_TYPE_NONE); //"kicks" will be overwritten later with 'rolls' or whatever
@@ -7354,8 +7545,8 @@ function Flightkick_Page_Template(IC, height_dial_id, distance_dial_id, speed_di
   this.distance_dial.num_digits   = 
   this.height_dial.level_digits   = 
   this.height_dial.num_digits     = 0;
-  
-  this.video_modal          = new Video_Modal_Widget  (video_modal_id, ""); //set the video src when the page loads
+
+  this.video_modal          = VideoService.getVideoModal(); //set the video src when the page loads
   //this.ball_position        = new Ball_Position_Widget(ball_position_id, widgets_directory);
   this.ball_position        = new Ball_Position_Widget_3D('ball_position_page_b', widgets_directory, false);
   this.score_log            = new Score_Log_Widget    (score_log_id, "", ["Start Time", "End Time", "Distance", "Height", "Speed", "Spin", "Duration", "Force", "session_count", "count_type", "session_duration"], ["*", "*", 0,0,0,0,0,0, "*", "*", "*"], [{min: 0, max: 10}, {min: 0, max: 10}, {min: 0, max: 10}, {min: 0, max: 100}, {min: 0, max: 5}, {min: 0, max: 800}]);
@@ -7568,7 +7759,7 @@ Freeplay_Page_Template.STATE_CONNECTED                    = 1;
 /*--------------------------------------------------------------------*/
 function Freeplay_Page_Template(IC, video_modal_id, distance_dial_id, time_dial_id, ball_position_id, score_log_id, speech_log_id, widgets_directory)
 {
-  this.video_modal                         = new Video_Modal_Widget  (video_modal_id, ""); //set the video src when the page loads
+  this.video_modal                         = VideoService.getVideoModal(); //set the video src when the page loads
   this.distance_dial                       = new Speedometer_Widget  (distance_dial_id, "meters", "distance" , widgets_directory, Speedometer_Widget.STYLE_SPEEDOMETER, Speedometer_Widget.GOAL_TYPE_NONE);
   this.time_dial                           = new Speedometer_Widget  (time_dial_id  , "minutes", "minutes", widgets_directory, Speedometer_Widget.STYLE_TIMER, Speedometer_Widget.GOAL_TYPE_NONE);
   this.ball_position                       = new Ball_Position_Widget(ball_position_id, widgets_directory);
@@ -7802,7 +7993,7 @@ Cone_Weaving_Page_Template.CONE_PAUSE_TIMER_TIMEOUT                    = 8;
 /*--------------------------------------------------------------------*/
 function Cone_Weaving_Page_Template(IC, video_modal_id, ball_position_id, score_log_id, speech_log_id, widgets_directory)
 {
-  this.video_modal                         = new Video_Modal_Widget  (video_modal_id, ""); //set the video src when the page loads
+  this.video_modal                         = VideoService.getVideoModal(); //set the video src when the page loads
   this.ball_position                       = new Ball_Position_Widget(ball_position_id, widgets_directory);
   this.score_log                           = new Score_Log_Widget    (score_log_id, "", ["Start Time", "End Time", "Active Duration", "Laps", "Ball Control", "Num Cones", "Total Dist", "session_count", "count_type", "session_duration"], ["*", "*", "0:00", 0, 0, 0, 0, "*", "*","*",], [{min: 0, max: 100}, {min: 0, max: 100}, {min:0, max:100}, {min:0, max:100000}, {min:0, max:100}]);
   this.speech_log                          = new Speech_Log_Widget   (speech_log_id);
@@ -7855,11 +8046,12 @@ Cone_Weaving_Page_Template.prototype.clear = function()
   
   
 /*--------------------------------------------------------------------*/
-Cone_Weaving_Page_Template.prototype.page_load = function(name, video_path, speedometer_level_text, speedometer_num_text)
+Cone_Weaving_Page_Template.prototype.page_load = function(name, video_path, setup_video, speedometer_level_text, speedometer_num_text)
 {
     ViewUtil.scrollToTopOfPage();
 
-  this.video_modal.set_video(video_path);
+  this.video_path = video_path;
+  this.setup_video = setup_video;
   this.score_log.set_game_name(name);
   this.speech_log.prime();
   this.clear();
@@ -7883,6 +8075,21 @@ Cone_Weaving_Page_Template.prototype.page_did_unload = function()
 {
 
 };
+
+Cone_Weaving_Page_Template.prototype.onWatchTrainingClicked = function(e)
+{
+    this.video_modal.set_video(this.video_path);
+    this.video_modal.show_modal()
+
+};
+
+Cone_Weaving_Page_Template.prototype.onWatchSetupClicked = function(e)
+{
+    this.video_modal.set_video(this.setup_video);
+    this.video_modal.show_modal()
+
+};
+
 
 /*--------------------------------------------------------------------*/
 /*--------------------------------------------------------------------*/
@@ -8181,7 +8388,7 @@ function navigation_load_routine(routine_name)
 
   else if(routine.type == 'cones')
     {
-      new_page.obj.page_load(routine_name, routine_video_url);
+      new_page.obj.page_load(routine_name, routine_video_url, routine.setup_video);
     }
 
   else if(routine.type == 'freeplay')
